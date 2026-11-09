@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lược đồ XSD cho file TaiKhoan.xml -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="NewDataSet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="TaiKhoan" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TenDangNhap">
+                <xs:annotation><xs:documentation>Tên đăng nhập</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="[A-Za-z0-9_]{3,50}"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="MatKhau">
+                <xs:annotation><xs:documentation>Mật khẩu</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="50"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="Quyen">
+                <xs:annotation><xs:documentation>Quyền hạn</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="Admin"/><xs:enumeration value="NhanVien"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="MaNV">
+                <xs:annotation><xs:documentation>Nhân viên sở hữu tài khoản</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="NV[0-9]{3}"/></xs:restriction></xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+    <!-- Khóa chính: không cho phép trùng -->
+    <xs:key name="PK_TaiKhoan">
+      <xs:selector xpath="TaiKhoan"/>
+      <xs:field xpath="TenDangNhap"/>
+    </xs:key>
+  </xs:element>
+</xs:schema>

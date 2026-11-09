@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <NhanVien>
+    <MaNV>NV001</MaNV>
+    <HoTen>Nguyễn Văn An</HoTen>
+    <GioiTinh>Nam</GioiTinh>
+    <NgaySinh>1990-05-12</NgaySinh>
+    <DiaChi>Hải Châu, Đà Nẵng</DiaChi>
+    <SDT>0905111222</SDT>
+  </NhanVien>
+  <NhanVien>
+    <MaNV>NV002</MaNV>
+    <HoTen>Trần Thị Bình</HoTen>
+    <GioiTinh>Nữ</GioiTinh>
+    <NgaySinh>1998-09-20</NgaySinh>
+    <DiaChi>Liên Chiểu, Đà Nẵng</DiaChi>
+    <SDT>0935333444</SDT>
+  </NhanVien>
+  <NhanVien>
+    <MaNV>NV003</MaNV>
+    <HoTen>Lê Minh Châu</HoTen>
+    <GioiTinh>Nam</GioiTinh>
+    <NgaySinh>2000-01-15</NgaySinh>
+    <DiaChi>Thanh Khê, Đà Nẵng</DiaChi>
+    <SDT>0914555666</SDT>
+  </NhanVien>
+</NewDataSet>

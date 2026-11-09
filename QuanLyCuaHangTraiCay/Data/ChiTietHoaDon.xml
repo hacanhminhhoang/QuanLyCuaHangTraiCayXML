@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <ChiTietHoaDon>
+    <MaHD>HD001</MaHD>
+    <MaTC>TC001</MaTC>
+    <SoLuong>2</SoLuong>
+    <DonGia>65000</DonGia>
+    <ThanhTien>130000</ThanhTien>
+  </ChiTietHoaDon>
+  <ChiTietHoaDon>
+    <MaHD>HD001</MaHD>
+    <MaTC>TC003</MaTC>
+    <SoLuong>1</SoLuong>
+    <DonGia>150000</DonGia>
+    <ThanhTien>150000</ThanhTien>
+  </ChiTietHoaDon>
+  <ChiTietHoaDon>
+    <MaHD>HD002</MaHD>
+    <MaTC>TC005</MaTC>
+    <SoLuong>3</SoLuong>
+    <DonGia>40000</DonGia>
+    <ThanhTien>120000</ThanhTien>
+  </ChiTietHoaDon>
+</NewDataSet>

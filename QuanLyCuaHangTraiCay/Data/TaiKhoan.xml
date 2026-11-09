@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <TaiKhoan>
+    <TenDangNhap>admin</TenDangNhap>
+    <MatKhau>admin</MatKhau>
+    <Quyen>Admin</Quyen>
+    <MaNV>NV001</MaNV>
+  </TaiKhoan>
+  <TaiKhoan>
+    <TenDangNhap>binh</TenDangNhap>
+    <MatKhau>123</MatKhau>
+    <Quyen>NhanVien</Quyen>
+    <MaNV>NV002</MaNV>
+  </TaiKhoan>
+  <TaiKhoan>
+    <TenDangNhap>chau</TenDangNhap>
+    <MatKhau>123</MatKhau>
+    <Quyen>NhanVien</Quyen>
+    <MaNV>NV003</MaNV>
+  </TaiKhoan>
+</NewDataSet>

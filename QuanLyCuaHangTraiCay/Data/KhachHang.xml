@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <KhachHang>
+    <MaKH>KH001</MaKH>
+    <TenKH>Khách lẻ</TenKH>
+    <SDT></SDT>
+    <DiaChi></DiaChi>
+  </KhachHang>
+  <KhachHang>
+    <MaKH>KH002</MaKH>
+    <TenKH>Phạm Thu Hà</TenKH>
+    <SDT>0905123456</SDT>
+    <DiaChi>Liên Chiểu, Đà Nẵng</DiaChi>
+  </KhachHang>
+  <KhachHang>
+    <MaKH>KH003</MaKH>
+    <TenKH>Võ Quốc Huy</TenKH>
+    <SDT>0935987654</SDT>
+    <DiaChi>Hải Châu, Đà Nẵng</DiaChi>
+  </KhachHang>
+</NewDataSet>
