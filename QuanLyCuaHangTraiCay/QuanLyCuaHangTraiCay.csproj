@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>7.3</LangVersion>
+    <RootNamespace>QuanLyCuaHangTraiCay</RootNamespace>
+    <AssemblyName>QuanLyCuaHangTraiCay</AssemblyName>
+    <AssemblyTitle>Quản lý cửa hàng trái cây</AssemblyTitle>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+
+  <!-- Thư mục Data (XML, XSD, XSLT) được chép cạnh file .exe khi build -->
+  <ItemGroup>
+    <None Update="Data\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
