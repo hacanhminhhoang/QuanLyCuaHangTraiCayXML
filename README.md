@@ -58,7 +58,8 @@ dotnet run --project QuanLyCuaHangTraiCay
 
 Chương trình chạy được ngay với dữ liệu XML có sẵn. Muốn dùng chức năng đồng bộ SQL Server:
 - Mở `Database/QLCuaHangTraiCay.sql` trong SSMS và chạy (F5).
-- Nếu dùng SQL Express, sửa `Data Source=.` thành `Data Source=.\SQLEXPRESS` trong `appsettings.json`.
+- Nếu dùng SQL Express, sửa `Data Source=.` thành `Data Source=.\\SQLEXPRESS` trong `appsettings.json` (JSON cần 2 dấu `\`).
+- Hướng dẫn kiểm thử đầy đủ: [docs/KiemThu.md](docs/KiemThu.md) · Kế hoạch tiếp theo: [docs/KeHoach.md](docs/KeHoach.md).
 
 > Lưu ý: chương trình ghi thẳng vào các file trong `QuanLyCuaHangTraiCay/Data`, nên mọi thao tác
 > thêm/sửa/xóa sẽ hiện ngay trong file XML (dùng `git checkout -- QuanLyCuaHangTraiCay/Data` để khôi phục dữ liệu mẫu).
