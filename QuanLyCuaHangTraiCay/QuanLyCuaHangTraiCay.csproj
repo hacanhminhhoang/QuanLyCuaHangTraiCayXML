@@ -1,23 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net48</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
-    <LangVersion>7.3</LangVersion>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>QuanLyCuaHangTraiCay</RootNamespace>
-    <AssemblyName>QuanLyCuaHangTraiCay</AssemblyName>
-    <AssemblyTitle>Quản lý cửa hàng trái cây</AssemblyTitle>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
   </ItemGroup>
 
-  <!-- Thư mục Data (XML, XSD, XSLT) được chép cạnh file .exe khi build -->
+  <!-- Thư mục Data (XML, XSD, XSLT) được đọc/ghi trực tiếp tại thư mục project; chép kèm khi publish -->
   <ItemGroup>
-    <None Update="Data\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Data\**" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

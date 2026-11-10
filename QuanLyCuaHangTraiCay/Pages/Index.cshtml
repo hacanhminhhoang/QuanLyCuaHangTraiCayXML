@@ -1,0 +1,60 @@
+@page
+@model IndexModel
+@{ ViewData["Title"] = "Tổng quan"; }
+<header class="tieu-de-trang">
+    <div>
+        <h1>Xin chào, @User.HoTen()</h1>
+        <p class="phu">Tình hình cửa hàng hôm nay, @DateTime.Today.ToString("dd/MM/yyyy").</p>
+    </div>
+    <a class="nut nut-chinh" href="/LapHoaDon">+ Lập hóa đơn</a>
+</header>
+
+<section class="luoi-thong-ke" aria-label="Số liệu tổng quan">
+    <div class="the thong-ke nhan-manh"><span>Doanh thu tháng này</span><b>@DinhDang.Tien(Model.DoanhThuThang)</b><small>@Model.SoHoaDonThang hóa đơn</small></div>
+    <div class="the thong-ke"><span>Doanh thu hôm nay</span><b>@DinhDang.Tien(Model.DoanhThuHomNay)</b></div>
+    <div class="the thong-ke"><span>Loại trái cây</span><b>@Model.SoTraiCay</b><small>@Model.SapHetHang.Count sắp hết hàng</small></div>
+    <div class="the thong-ke"><span>Khách hàng</span><b>@Model.SoKhachHang</b></div>
+</section>
+
+<div class="luoi-hai-cot">
+    <section class="the">
+        <div class="the-dau"><h2>Hóa đơn gần đây</h2><a href="/HoaDon">Xem tất cả</a></div>
+        <div class="cuon-ngang">
+        <table class="bang">
+            <thead><tr><th>Mã HĐ</th><th>Ngày</th><th>Khách hàng</th><th class="so">Tổng tiền</th></tr></thead>
+            <tbody>
+                @foreach (var r in Model.HoaDonGanDay)
+                {
+                    <tr>
+                        <td><a href="/HoaDon?ma=@r["MaHD"]">@r["MaHD"]</a></td>
+                        <td>@DinhDang.Ngay(r["NgayLap"])</td>
+                        <td>@Model.TenKhach.Ten(r["MaKH"])</td>
+                        <td class="so">@DinhDang.Tien(r["TongTien"])</td>
+                    </tr>
+                }
+                @if (Model.HoaDonGanDay.Count == 0)
+                {
+                    <tr><td colspan="4" class="trong">Chưa có hóa đơn nào.</td></tr>
+                }
+            </tbody>
+        </table>
+        </div>
+    </section>
+    <section class="the">
+        <div class="the-dau"><h2>Sắp hết hàng</h2><span class="phu">tồn &lt; @IndexModel.NguongSapHet</span></div>
+        @if (Model.SapHetHang.Count == 0)
+        {
+            <p class="trong">Tất cả trái cây đều đủ hàng.</p>
+        }
+        <ul class="ds-ton">
+            @foreach (var r in Model.SapHetHang)
+            {
+                int ton = (int)r["SoLuongTon"];
+                <li>
+                    <a href="/DanhMuc/TraiCay?ma=@r["MaTC"]">@r["TenTC"]</a>
+                    <span class="badge @(ton == 0 ? "badge-do" : "badge-cam")">@ton @r["DonViTinh"]</span>
+                </li>
+            }
+        </ul>
+    </section>
+</div>

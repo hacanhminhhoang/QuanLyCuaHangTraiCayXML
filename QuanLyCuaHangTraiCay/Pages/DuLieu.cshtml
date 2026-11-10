@@ -1,0 +1,59 @@
+@page
+@model DuLieuModel
+@{ ViewData["Title"] = "Dữ liệu XML"; }
+<header class="tieu-de-trang">
+    <div>
+        <h1>Dữ liệu XML</h1>
+        <p class="phu">Đồng bộ giữa SQL Server và các file XML, kiểm tra hợp lệ theo lược đồ XSD.</p>
+    </div>
+</header>
+
+<div class="luoi-hai-cot">
+    <section class="the hanh-dong">
+        <h2>Database → XML</h2>
+        <p class="phu">Đọc toàn bộ 7 bảng trong SQL Server và ghi đè các file XML trong thư mục <code>Data</code>.</p>
+        <form method="post" asp-page-handler="SqlSangXml" onsubmit="return confirm('Ghi đè toàn bộ file XML bằng dữ liệu từ SQL Server?')">
+            <button class="nut nut-chinh" type="submit">Tạo XML từ CSDL</button>
+        </form>
+    </section>
+    <section class="the hanh-dong">
+        <h2>XML → Database</h2>
+        <p class="phu">Kiểm tra hợp lệ rồi ghi dữ liệu XML vào SQL Server trong một transaction (lỗi thì CSDL giữ nguyên).</p>
+        <form method="post" asp-page-handler="XmlSangSql" onsubmit="return confirm('Ghi đè dữ liệu SQL Server bằng dữ liệu XML?')">
+            <button class="nut nut-chinh" type="submit">Cập nhật CSDL từ XML</button>
+        </form>
+    </section>
+</div>
+
+<section class="the">
+    <div class="the-dau">
+        <h2>Kiểm tra hợp lệ (XSD)</h2>
+        <a class="nut nut-nhe" href="/DuLieu">Kiểm tra lại</a>
+    </div>
+    <div class="cuon-ngang">
+    <table class="bang">
+        <thead><tr><th>File XML</th><th>Lược đồ</th><th class="so">Số dòng</th><th>Kết quả</th></tr></thead>
+        <tbody>
+            @foreach (var k in Model.DanhSach)
+            {
+                <tr>
+                    <td><code>@(k.Bang).xml</code></td>
+                    <td><code>@(k.Bang).xsd</code></td>
+                    <td class="so">@(k.Loi.Count == 0 ? k.SoDong.ToString() : "—")</td>
+                    <td>
+                        @if (k.Loi.Count == 0)
+                        {
+                            <span class="badge badge-xanh">✓ Hợp lệ</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-do">✗ @k.Loi.Count lỗi</span>
+                            <ul class="ds-loi">@foreach (var l in k.Loi) { <li>@l</li> }</ul>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+</section>
