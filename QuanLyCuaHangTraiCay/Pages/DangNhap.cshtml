@@ -1,0 +1,25 @@
+@page
+@model DangNhapModel
+@{ ViewData["Title"] = "Đăng nhập"; }
+<div class="trang-dang-nhap">
+    <section class="dn-gioi-thieu" aria-hidden="true">
+        <h1>Fruit Store</h1>
+        <p>Phần mềm quản lý cửa hàng trái cây — dữ liệu lưu bằng XML, kiểm tra bằng XSD, hiển thị bằng XSLT.</p>
+        <ul class="trai-cay-trang-tri"><li>🥭</li><li>🍉</li><li>🍊</li><li>🍇</li><li>🥝</li></ul>
+    </section>
+    <form method="post" class="the dn-form">
+        <h2>Đăng nhập</h2>
+        <p class="phu">Nhập tài khoản được cấp để tiếp tục.</p>
+        @if (Model.Loi != null)
+        {
+            <div class="alert alert-loi" role="alert">@Model.Loi</div>
+        }
+        <label for="ten">Tên đăng nhập</label>
+        <input id="ten" name="TenDangNhap" value="@Model.TenDangNhap" autocomplete="username" required autofocus />
+        <label for="mk">Mật khẩu</label>
+        <input id="mk" name="MatKhau" type="password" autocomplete="current-password" required />
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <button class="nut nut-chinh nut-rong" type="submit">Đăng nhập</button>
+        <p class="goi-y">Tài khoản demo: <code>admin / admin</code> (quản lý), <code>binh / 123</code> (nhân viên)</p>
+    </form>
+</div>

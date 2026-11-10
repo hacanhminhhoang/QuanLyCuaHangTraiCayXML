@@ -1,0 +1,23 @@
+@page
+@model DoiMatKhauModel
+@{ ViewData["Title"] = "Đổi mật khẩu"; }
+<header class="tieu-de-trang">
+    <h1>Đổi mật khẩu</h1>
+    <p class="phu">Tài khoản: <b>@User.Identity.Name</b></p>
+</header>
+<form method="post" class="the form-hep">
+    @if (Model.Loi != null)
+    {
+        <div class="alert alert-loi" role="alert">@Model.Loi</div>
+    }
+    <label for="cu">Mật khẩu hiện tại</label>
+    <input id="cu" name="MatKhauCu" type="password" autocomplete="current-password" required />
+    <label for="moi">Mật khẩu mới</label>
+    <input id="moi" name="MatKhauMoi" type="password" autocomplete="new-password" required />
+    <label for="lai">Nhập lại mật khẩu mới</label>
+    <input id="lai" name="NhapLai" type="password" autocomplete="new-password" required />
+    <div class="hang-nut">
+        <button class="nut nut-chinh" type="submit">Lưu mật khẩu</button>
+        <a class="nut" href="/">Hủy</a>
+    </div>
+</form>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lược đồ XSD cho file HoaDon.xml -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="NewDataSet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="HoaDon" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="MaHD">
+                <xs:annotation><xs:documentation>Mã hóa đơn</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="HD[0-9]{3}"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="NgayLap" type="xs:date"><xs:annotation><xs:documentation>Ngày lập</xs:documentation></xs:annotation></xs:element>
+              <xs:element name="MaNV">
+                <xs:annotation><xs:documentation>Nhân viên lập</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="NV[0-9]{3}"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="MaKH">
+                <xs:annotation><xs:documentation>Khách hàng</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="KH[0-9]{3}"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="TongTien">
+                <xs:annotation><xs:documentation>Tổng tiền</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:decimal"><xs:minInclusive value="0"/><xs:fractionDigits value="0"/><xs:pattern value="[0-9]+"/></xs:restriction></xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+    <!-- Khóa chính: không cho phép trùng -->
+    <xs:key name="PK_HoaDon">
+      <xs:selector xpath="HoaDon"/>
+      <xs:field xpath="MaHD"/>
+    </xs:key>
+  </xs:element>
+</xs:schema>

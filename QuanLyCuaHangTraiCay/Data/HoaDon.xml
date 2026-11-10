@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <HoaDon>
+    <MaHD>HD001</MaHD>
+    <NgayLap>2026-11-01</NgayLap>
+    <MaNV>NV002</MaNV>
+    <MaKH>KH002</MaKH>
+    <TongTien>280000</TongTien>
+  </HoaDon>
+  <HoaDon>
+    <MaHD>HD002</MaHD>
+    <NgayLap>2026-11-05</NgayLap>
+    <MaNV>NV001</MaNV>
+    <MaKH>KH001</MaKH>
+    <TongTien>120000</TongTien>
+  </HoaDon>
+</NewDataSet>

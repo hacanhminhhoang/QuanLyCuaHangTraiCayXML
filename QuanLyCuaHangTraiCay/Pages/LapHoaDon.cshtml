@@ -1,0 +1,76 @@
+@page
+@model LapHoaDonModel
+@{ ViewData["Title"] = "Lập hóa đơn"; }
+<header class="tieu-de-trang">
+    <div>
+        <h1>Lập hóa đơn <span class="ma">@Model.MaHD</span></h1>
+        <p class="phu">Nhập số lượng cho các loại trái cây khách mua. Tồn kho được kiểm tra và trừ khi lưu.</p>
+    </div>
+</header>
+<form method="post" class="luoi-hoa-don">
+    <section class="the">
+        @if (Model.Loi != null)
+        {
+            <div class="alert alert-loi" role="alert">@Model.Loi</div>
+        }
+        <div class="cuon-ngang">
+            <table class="bang bang-chon">
+                <thead><tr><th>Trái cây</th><th>Xuất xứ</th><th class="so">Đơn giá</th><th class="so">Tồn</th><th class="so">Số lượng</th><th class="so">Thành tiền</th></tr></thead>
+                <tbody>
+                    @foreach (DataRow r in Model.TraiCay.Rows)
+                    {
+                        string ma = r["MaTC"].ToString();
+                        int ton = (int)r["SoLuongTon"];
+                        <tr class="@(ton == 0 ? "het-hang" : null)">
+                            <td><b>@r["TenTC"]</b><small class="phu"> @ma</small></td>
+                            <td>@r["XuatXu"]</td>
+                            <td class="so">@DinhDang.So(r["DonGia"])<small class="phu">/@r["DonViTinh"]</small></td>
+                            <td class="so"><span class="badge @(ton == 0 ? "badge-do" : ton < 20 ? "badge-cam" : "badge-xanh")">@ton</span></td>
+                            <td class="so">
+                                <input class="o-so-luong" type="number" name="sl_@ma" min="0" max="@ton" step="1"
+                                       value="@(Model.SoLuong.ContainsKey(ma) ? Model.SoLuong[ma].ToString() : "")" placeholder="0"
+                                       data-gia="@DinhDang.Goc(r["DonGia"])" disabled="@(ton == 0)" aria-label="Số lượng @r["TenTC"]" />
+                            </td>
+                            <td class="so thanh-tien">—</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <aside class="the tom-tat">
+        <h2>Thông tin hóa đơn</h2>
+        <label for="kh">Khách hàng</label>
+        <select id="kh" name="MaKH" required>
+            @foreach (DataRow k in Model.KhachHang.Rows)
+            {
+                <option value="@k["MaKH"]" selected="@(k["MaKH"].ToString() == Model.MaKH)">@k["TenKH"]</option>
+            }
+        </select>
+        <label for="ngay">Ngày lập</label>
+        <input id="ngay" type="date" name="NgayLap" value="@Model.NgayLap.ToString("yyyy-MM-dd")" required />
+        <label>Nhân viên</label>
+        <p class="gia-tri">@User.HoTen()</p>
+        <div class="tong-tien"><span>Tổng tiền</span><b id="tong">0 đ</b></div>
+        <button class="nut nut-chinh nut-rong" type="submit">Lưu hóa đơn</button>
+    </aside>
+</form>
+
+@section Scripts {
+<script>
+    // Tính thành tiền ngay trên trình duyệt (server vẫn tính lại khi lưu)
+    const vnd = n => n.toLocaleString('vi-VN') + ' đ';
+    function tinhTong() {
+        let tong = 0;
+        document.querySelectorAll('.o-so-luong').forEach(o => {
+            const tien = (parseInt(o.value) || 0) * Number(o.dataset.gia);
+            o.closest('tr').querySelector('.thanh-tien').textContent = tien ? vnd(tien) : '—';
+            o.closest('tr').classList.toggle('dang-chon', tien > 0);
+            tong += tien;
+        });
+        document.getElementById('tong').textContent = vnd(tong);
+    }
+    document.addEventListener('input', e => { if (e.target.matches('.o-so-luong')) tinhTong(); });
+    tinhTong();
+</script>
+}

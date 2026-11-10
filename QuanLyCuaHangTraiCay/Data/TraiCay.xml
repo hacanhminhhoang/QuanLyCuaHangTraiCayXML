@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <TraiCay>
+    <MaTC>TC001</MaTC>
+    <TenTC>Xoài cát Hòa Lộc</TenTC>
+    <XuatXu>Tiền Giang</XuatXu>
+    <DonViTinh>kg</DonViTinh>
+    <DonGia>65000</DonGia>
+    <SoLuongTon>48</SoLuongTon>
+    <MaNCC>NCC002</MaNCC>
+  </TraiCay>
+  <TraiCay>
+    <MaTC>TC002</MaTC>
+    <TenTC>Sầu riêng Ri6</TenTC>
+    <XuatXu>Bến Tre</XuatXu>
+    <DonViTinh>kg</DonViTinh>
+    <DonGia>120000</DonGia>
+    <SoLuongTon>30</SoLuongTon>
+    <MaNCC>NCC002</MaNCC>
+  </TraiCay>
+  <TraiCay>
+    <MaTC>TC003</MaTC>
+    <TenTC>Táo Envy</TenTC>
+    <XuatXu>Mỹ</XuatXu>
+    <DonViTinh>kg</DonViTinh>
+    <DonGia>150000</DonGia>
+    <SoLuongTon>39</SoLuongTon>
+    <MaNCC>NCC003</MaNCC>
+  </TraiCay>
+  <TraiCay>
+    <MaTC>TC004</MaTC>
+    <TenTC>Nho xanh Ninh Thuận</TenTC>
+    <XuatXu>Ninh Thuận</XuatXu>
+    <DonViTinh>kg</DonViTinh>
+    <DonGia>70000</DonGia>
+    <SoLuongTon>25</SoLuongTon>
+    <MaNCC>NCC001</MaNCC>
+  </TraiCay>
+  <TraiCay>
+    <MaTC>TC005</MaTC>
+    <TenTC>Thanh long ruột đỏ</TenTC>
+    <XuatXu>Bình Thuận</XuatXu>
+    <DonViTinh>kg</DonViTinh>
+    <DonGia>40000</DonGia>
+    <SoLuongTon>57</SoLuongTon>
+    <MaNCC>NCC001</MaNCC>
+  </TraiCay>
+  <TraiCay>
+    <MaTC>TC006</MaTC>
+    <TenTC>Cam sành</TenTC>
+    <XuatXu>Vĩnh Long</XuatXu>
+    <DonViTinh>kg</DonViTinh>
+    <DonGia>35000</DonGia>
+    <SoLuongTon>80</SoLuongTon>
+    <MaNCC>NCC002</MaNCC>
+  </TraiCay>
+  <TraiCay>
+    <MaTC>TC007</MaTC>
+    <TenTC>Kiwi vàng</TenTC>
+    <XuatXu>New Zealand</XuatXu>
+    <DonViTinh>kg</DonViTinh>
+    <DonGia>180000</DonGia>
+    <SoLuongTon>20</SoLuongTon>
+    <MaNCC>NCC003</MaNCC>
+  </TraiCay>
+  <TraiCay>
+    <MaTC>TC008</MaTC>
+    <TenTC>Dưa hấu Long An</TenTC>
+    <XuatXu>Long An</XuatXu>
+    <DonViTinh>quả</DonViTinh>
+    <DonGia>45000</DonGia>
+    <SoLuongTon>35</SoLuongTon>
+    <MaNCC>NCC001</MaNCC>
+  </TraiCay>
+</NewDataSet>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lược đồ XSD cho file NhaCungCap.xml -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="NewDataSet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NhaCungCap" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="MaNCC">
+                <xs:annotation><xs:documentation>Mã nhà cung cấp</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="NCC[0-9]{3}"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="TenNCC">
+                <xs:annotation><xs:documentation>Tên nhà cung cấp</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="150"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="DiaChi">
+                <xs:annotation><xs:documentation>Địa chỉ</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="150"/></xs:restriction></xs:simpleType>
+              </xs:element>
+              <xs:element name="SDT">
+                <xs:annotation><xs:documentation>Số điện thoại</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="0[0-9]{9}"/></xs:restriction></xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+    <!-- Khóa chính: không cho phép trùng -->
+    <xs:key name="PK_NhaCungCap">
+      <xs:selector xpath="NhaCungCap"/>
+      <xs:field xpath="MaNCC"/>
+    </xs:key>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,123 @@
+@page "{bang=TraiCay}"
+@model DanhMucModel
+@{
+    var ch = Model.CauHinh;
+    ViewData["Title"] = ch.TieuDe;
+    string khoa = ch.Cot[0].Ten;
+}
+<header class="tieu-de-trang">
+    <div>
+        <h1>@ch.TieuDe</h1>
+        <p class="phu">Dữ liệu lưu tại <code>Data/@(Model.Bang).xml</code>, kiểm tra theo <code>@(Model.Bang).xsd</code> mỗi lần lưu.</p>
+    </div>
+    <a class="nut" href="/Xslt?bang=@Model.Bang&amp;tuKhoa=@Model.TuKhoa" target="_blank">Xem bằng XSLT ↗</a>
+</header>
+
+<div>
+    <form method="post" asp-page-handler="Luu" class="the form-nhap" id="form-nhap">
+        <h2>@(Model.DangSua ? "Sửa " + ch.TieuDe.ToLower() : "Thêm " + ch.TieuDe.ToLower())</h2>
+        @if (Model.Loi != null)
+        {
+            <div class="alert alert-loi" role="alert">
+                @Model.Loi
+                @if (Model.ChiTietLoi != null)
+                {
+                    <details><summary>Chi tiết kỹ thuật</summary><pre>@Model.ChiTietLoi</pre></details>
+                }
+            </div>
+        }
+        <input type="hidden" name="dangSua" value="@Model.DangSua.ToString().ToLower()" />
+        <div class="cac-truong">
+        @for (int i = 0; i < ch.Cot.Length; i++)
+        {
+            var c = ch.Cot[i];
+            string gt = Model.GiaTri.GetValueOrDefault(c.Ten, "");
+            bool chiDoc = i == 0 && (Model.DangSua || ch.TienTo != null);
+            bool loi = c.Ten == Model.TruongLoi;
+            @:<div>
+            <label for="o-@c.Ten">@c.NhanDe</label>
+            if (c.LuaChon != null || c.BangLienKet != null)
+            {
+                var ds = c.LuaChon != null ? c.LuaChon.ToDictionary(x => x, x => x) : Model.LienKet[c.Ten];
+                <select id="o-@c.Ten" name="@c.Ten" class="@(loi ? "o-loi" : null)" aria-invalid="@(loi ? "true" : null)">
+                    @foreach (var lc in ds)
+                    {
+                        <option value="@lc.Key" selected="@(lc.Key == gt)">@lc.Value</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <input id="o-@c.Ten" name="@c.Ten" value="@gt" type="@c.Kieu" readonly="@chiDoc" class="@(loi ? "o-loi" : null)" aria-invalid="@(loi ? "true" : null)"
+                       required="@(i < 2)" min="@(c.Kieu == "number" ? "0" : null)" step="@(c.Kieu == "number" ? "1" : null)" />
+            }
+            @:</div>
+        }
+        </div>
+        <div class="hang-nut">
+            <button class="nut nut-chinh" type="submit">@(Model.DangSua ? "Lưu thay đổi" : "Thêm mới")</button>
+            @if (Model.DangSua)
+            {
+                <a class="nut" href="/DanhMuc/@Model.Bang">Hủy</a>
+            }
+        </div>
+    </form>
+
+    <section class="the">
+        <form method="get" class="thanh-tim" role="search">
+            <input name="tuKhoa" value="@Model.TuKhoa" placeholder="Tìm theo bất kỳ thông tin nào…" aria-label="Từ khóa tìm kiếm" />
+            <button class="nut" type="submit">Tìm</button>
+            @if (!string.IsNullOrEmpty(Model.TuKhoa))
+            {
+                <a class="nut nut-nhe" href="/DanhMuc/@Model.Bang">Bỏ lọc</a>
+            }
+        </form>
+        <p class="phu">Hiển thị @Model.DuLieu.Rows.Count / @Model.TongSo dòng</p>
+        <div class="cuon-ngang">
+            <table class="bang">
+                <thead>
+                    <tr>
+                        @foreach (var c in ch.Cot)
+                        {
+                            <th class="@(c.Kieu == "number" ? "so" : null)">@c.NhanDe</th>
+                        }
+                        <th><span class="sr-only">Thao tác</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow r in Model.DuLieu.Rows)
+                    {
+                        string ma = r[khoa].ToString();
+                        <tr class="@(ma == Model.Ma ? "dang-chon" : null)">
+                            @foreach (var c in ch.Cot)
+                            {
+                                object v = r[c.Ten];
+                                if (c.Ten == "SoLuongTon")
+                                {
+                                    int ton = Convert.ToInt32(v);
+                                    <td class="so"><span class="badge @(ton == 0 ? "badge-do" : ton < 20 ? "badge-cam" : "badge-xanh")">@ton</span></td>
+                                }
+                                else if (c.Kieu == "number") { <td class="so">@DinhDang.So(v)</td> }
+                                else if (c.Kieu == "date") { <td>@DinhDang.Ngay(v)</td> }
+                                else if (c.Ten == "MatKhau") { <td>••••••</td> }
+                                else if (c.BangLienKet != null) { <td>@Model.LienKet[c.Ten].Ten(v)</td> }
+                                else { <td>@v</td> }
+                            }
+                            <td class="thao-tac">
+                                <a href="/DanhMuc/@Model.Bang?ma=@ma">Sửa</a>
+                                <form method="post" asp-page-handler="Xoa" onsubmit="return confirm('Xóa @ma?')">
+                                    <input type="hidden" name="maXoa" value="@ma" />
+                                    <button type="submit" class="lien-ket-xoa">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    @if (Model.DuLieu.Rows.Count == 0)
+                    {
+                        <tr><td colspan="@(ch.Cot.Length + 1)" class="trong">Không có dữ liệu phù hợp.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

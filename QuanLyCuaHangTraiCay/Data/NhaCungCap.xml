@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <NhaCungCap>
+    <MaNCC>NCC001</MaNCC>
+    <TenNCC>Vựa trái cây Hòa Khánh</TenNCC>
+    <DiaChi>Liên Chiểu, Đà Nẵng</DiaChi>
+    <SDT>0236371234</SDT>
+  </NhaCungCap>
+  <NhaCungCap>
+    <MaNCC>NCC002</MaNCC>
+    <TenNCC>HTX Trái cây Cái Bè</TenNCC>
+    <DiaChi>Cái Bè, Tiền Giang</DiaChi>
+    <SDT>0273382345</SDT>
+  </NhaCungCap>
+  <NhaCungCap>
+    <MaNCC>NCC003</MaNCC>
+    <TenNCC>Công ty Nhập khẩu Fresh Fruit</TenNCC>
+    <DiaChi>Quận 1, TP. Hồ Chí Minh</DiaChi>
+    <SDT>0283823456</SDT>
+  </NhaCungCap>
+</NewDataSet>

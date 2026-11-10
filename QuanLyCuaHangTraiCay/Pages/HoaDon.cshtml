@@ -1,0 +1,86 @@
+@page
+@model HoaDonModel
+@{ ViewData["Title"] = "Hóa đơn"; }
+<header class="tieu-de-trang">
+    <div>
+        <h1>Hóa đơn &amp; doanh thu</h1>
+        <p class="phu">@Model.DanhSach.Count hóa đơn · doanh thu <b>@DinhDang.Tien(Model.DoanhThu)</b></p>
+    </div>
+    <a class="nut nut-chinh" href="/LapHoaDon">+ Lập hóa đơn</a>
+</header>
+
+<form method="get" class="the thanh-loc">
+    <label>Từ ngày <input type="date" name="tu" value="@Model.Tu?.ToString("yyyy-MM-dd")" /></label>
+    <label>Đến ngày <input type="date" name="den" value="@Model.Den?.ToString("yyyy-MM-dd")" /></label>
+    <button class="nut" type="submit">Lọc</button>
+    <a class="nut nut-nhe" href="/HoaDon">Tất cả</a>
+</form>
+
+<div class="luoi-hai-cot rong-trai">
+    <section class="the">
+        <div class="cuon-ngang">
+        <table class="bang">
+            <thead><tr><th>Mã HĐ</th><th>Ngày lập</th><th>Khách hàng</th><th>Nhân viên</th><th class="so">Tổng tiền</th></tr></thead>
+            <tbody>
+                @foreach (var r in Model.DanhSach)
+                {
+                    string ma = r["MaHD"].ToString();
+                    <tr class="@(r == Model.DangChon ? "dang-chon" : null)">
+                        <td><a href="/HoaDon?ma=@ma&amp;tu=@Model.Tu?.ToString("yyyy-MM-dd")&amp;den=@Model.Den?.ToString("yyyy-MM-dd")">@ma</a></td>
+                        <td>@DinhDang.Ngay(r["NgayLap"])</td>
+                        <td>@Model.TenKhach.Ten(r["MaKH"])</td>
+                        <td>@Model.TenNhanVien.Ten(r["MaNV"])</td>
+                        <td class="so">@DinhDang.Tien(r["TongTien"])</td>
+                    </tr>
+                }
+                @if (Model.DanhSach.Count == 0)
+                {
+                    <tr><td colspan="5" class="trong">Không có hóa đơn trong khoảng thời gian này.</td></tr>
+                }
+            </tbody>
+        </table>
+        </div>
+    </section>
+
+    @if (Model.DangChon != null)
+    {
+        var hd = Model.DangChon;
+        <section class="the chi-tiet">
+            <div class="the-dau">
+                <h2>Hóa đơn @hd["MaHD"]</h2>
+                <span class="phu">@DinhDang.Ngay(hd["NgayLap"])</span>
+            </div>
+            <dl class="thong-tin">
+                <dt>Khách hàng</dt><dd>@Model.TenKhach.Ten(hd["MaKH"])</dd>
+                <dt>Nhân viên</dt><dd>@Model.TenNhanVien.Ten(hd["MaNV"])</dd>
+            </dl>
+            <div class="cuon-ngang">
+            <table class="bang">
+                <thead><tr><th>Trái cây</th><th class="so">SL</th><th class="so">Đơn giá</th><th class="so">Thành tiền</th></tr></thead>
+                <tbody>
+                    @foreach (var c in Model.ChiTiet)
+                    {
+                        <tr>
+                            <td>@Model.TenTraiCay.Ten(c["MaTC"])</td>
+                            <td class="so">@c["SoLuong"]</td>
+                            <td class="so">@DinhDang.So(c["DonGia"])</td>
+                            <td class="so">@DinhDang.So(c["ThanhTien"])</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot><tr><th colspan="3">Tổng tiền</th><th class="so">@DinhDang.Tien(hd["TongTien"])</th></tr></tfoot>
+            </table>
+            </div>
+            <div class="hang-nut">
+                <a class="nut nut-chinh" href="/Xslt?bang=HoaDon&amp;xslt=HoaDon&amp;maHD=@hd["MaHD"]" target="_blank">In hóa đơn (XSLT) ↗</a>
+                @if (User.LaAdmin())
+                {
+                    <form method="post" asp-page-handler="Xoa" onsubmit="return confirm('Xóa hóa đơn @hd["MaHD"] và hoàn lại tồn kho?')">
+                        <input type="hidden" name="maXoa" value="@hd["MaHD"]" />
+                        <button class="nut nut-nguy-hiem" type="submit">Xóa hóa đơn</button>
+                    </form>
+                }
+            </div>
+        </section>
+    }
+</div>
