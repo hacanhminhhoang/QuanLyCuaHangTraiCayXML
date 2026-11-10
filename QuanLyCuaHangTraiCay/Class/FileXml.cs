@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
+using Microsoft.Data.SqlClient;
 
 namespace QuanLyCuaHangTraiCay.Class
 {
@@ -23,13 +23,13 @@ namespace QuanLyCuaHangTraiCay.Class
         public static readonly string[] CacBang =
             { "NhanVien", "TaiKhoan", "NhaCungCap", "TraiCay", "KhachHang", "HoaDon", "ChiTietHoaDon" };
 
-        // Thư mục Data nằm cạnh file .exe (tương đương Application.StartupPath + "\\Data")
+        // Thư mục chứa XML/XSD/XSLT và chuỗi kết nối SQL Server: được gán trong Program.cs khi web khởi động
         public static string ThuMuc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+        public static string ChuoiKetNoi;
 
-        static string ChuoiKetNoi
-        {
-            get { return ConfigurationManager.ConnectionStrings["QLCuaHangTraiCay"].ConnectionString; }
-        }
+        // Web có nhiều request cùng lúc: mọi thao tác đọc-sửa-ghi file XML phải lần lượt
+        // ponytail: 1 khóa chung cho mọi file, đủ cho cửa hàng nhỏ; tách khóa theo file nếu cần nhanh hơn
+        public static readonly object KhoaGhi = new object();
 
         public static string DuongDan(string bang)
         {
@@ -89,39 +89,48 @@ namespace QuanLyCuaHangTraiCay.Class
 
         public static void Them(string bang, string[] cot, string[] giaTri)
         {
-            XmlDocument doc = Mo(bang);
-            XmlElement dong = doc.CreateElement(bang);
-            for (int i = 0; i < cot.Length; i++)
+            lock (KhoaGhi)
             {
-                XmlElement o = doc.CreateElement(cot[i]);
-                o.InnerText = giaTri[i];   // InnerText tự xử lý ký tự đặc biệt như < > &
-                dong.AppendChild(o);
+                XmlDocument doc = Mo(bang);
+                XmlElement dong = doc.CreateElement(bang);
+                for (int i = 0; i < cot.Length; i++)
+                {
+                    XmlElement o = doc.CreateElement(cot[i]);
+                    o.InnerText = giaTri[i];   // InnerText tự xử lý ký tự đặc biệt như < > &
+                    dong.AppendChild(o);
+                }
+                doc.DocumentElement.AppendChild(dong);
+                Luu(doc, bang);
             }
-            doc.DocumentElement.AppendChild(dong);
-            Luu(doc, bang);
         }
 
         /// <summary>Sửa các cột được truyền vào của dòng có truongKhoa = giaTriKhoa.</summary>
         public static void Sua(string bang, string truongKhoa, string giaTriKhoa, string[] cot, string[] giaTri)
         {
-            XmlDocument doc = Mo(bang);
-            XmlNode dong = doc.SelectSingleNode(XPath(bang, truongKhoa, giaTriKhoa));
-            if (dong == null)
-                throw new Exception("Không tìm thấy " + truongKhoa + " = " + giaTriKhoa);
-            for (int i = 0; i < cot.Length; i++)
-                dong[cot[i]].InnerText = giaTri[i];
-            Luu(doc, bang);
+            lock (KhoaGhi)
+            {
+                XmlDocument doc = Mo(bang);
+                XmlNode dong = doc.SelectSingleNode(XPath(bang, truongKhoa, giaTriKhoa));
+                if (dong == null)
+                    throw new Exception("Không tìm thấy " + truongKhoa + " = " + giaTriKhoa);
+                for (int i = 0; i < cot.Length; i++)
+                    dong[cot[i]].InnerText = giaTri[i];
+                Luu(doc, bang);
+            }
         }
 
         /// <summary>Xóa mọi dòng có truong = giaTri. Trả về số dòng đã xóa.</summary>
         public static int Xoa(string bang, string truong, string giaTri)
         {
-            XmlDocument doc = Mo(bang);
-            List<XmlNode> ds = doc.SelectNodes(XPath(bang, truong, giaTri)).Cast<XmlNode>().ToList();
-            foreach (XmlNode dong in ds)
-                dong.ParentNode.RemoveChild(dong);
-            Luu(doc, bang);
-            return ds.Count;
+            lock (KhoaGhi)
+            {
+                XmlDocument doc = Mo(bang);
+                List<XmlNode> ds = doc.SelectNodes(XPath(bang, truong, giaTri)).Cast<XmlNode>().ToList();
+                foreach (XmlNode dong in ds)
+                    dong.ParentNode.RemoveChild(dong);
+                Luu(doc, bang);
+                return ds.Count;
+            }
         }
 
         // ===================== KIỂM TRA HỢP LỆ (XSD) =====================
@@ -155,7 +164,7 @@ namespace QuanLyCuaHangTraiCay.Class
 
         // ===================== HIỂN THỊ TRÌNH DUYỆT (XSLT) =====================
 
-        /// <summary>Biến đổi file XML bằng XSLT ra file HTML, trả về đường dẫn file HTML.
+        /// <summary>Biến đổi file XML bằng XSLT, trả về chuỗi HTML để gửi thẳng cho trình duyệt.
         /// thamSo: các cặp tên, giá trị. Vd: XuatHTML("TraiCay", "DanhSach", "TuKhoa", "Xoài")</summary>
         public static string XuatHTML(string bang, string tenXslt, params string[] thamSo)
         {
@@ -167,11 +176,13 @@ namespace QuanLyCuaHangTraiCay.Class
             for (int i = 0; i + 1 < thamSo.Length; i += 2)
                 args.AddParam(thamSo[i], "", thamSo[i + 1]);
 
-            string html = Path.Combine(Path.GetTempPath(), bang + "_" + tenXslt + ".html");
-            using (XmlReader r = XmlReader.Create(DuongDan(bang)))
-            using (XmlWriter w = XmlWriter.Create(html, xslt.OutputSettings))
-                xslt.Transform(r, args, w, new XmlUrlResolver());   // resolver để document() đọc được file khác
-            return html;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (XmlReader r = XmlReader.Create(DuongDan(bang)))
+                using (XmlWriter w = XmlWriter.Create(ms, xslt.OutputSettings))
+                    xslt.Transform(r, args, w, new XmlUrlResolver());   // resolver để document() đọc được file khác
+                return Encoding.UTF8.GetString(ms.ToArray());
+            }
         }
 
         // ===================== ĐỒNG BỘ VỚI SQL SERVER =====================
@@ -193,6 +204,7 @@ namespace QuanLyCuaHangTraiCay.Class
 
             XmlWriterSettings st = new XmlWriterSettings();
             st.Indent = true;
+            lock (KhoaGhi)
             foreach (DataTable dt in ds)
             {
                 using (XmlWriter w = XmlWriter.Create(DuongDan(dt.TableName), st))
