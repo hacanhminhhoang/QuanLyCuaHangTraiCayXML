@@ -1,0 +1,17 @@
+@* Thêm nút hiện/ẩn mật khẩu cho mọi ô <input type="password"> trên trang (cho phép dán, trình quản lý mật khẩu vẫn dùng được). *@
+<script>
+    document.querySelectorAll('input[type=password]').forEach(function (o) {
+        var bao = document.createElement('div'); bao.className = 'o-mat-khau';
+        o.parentNode.insertBefore(bao, o); bao.appendChild(o);
+        var nut = document.createElement('button'); nut.type = 'button'; nut.className = 'nut-mat';
+        nut.setAttribute('aria-label', 'Hiện mật khẩu'); nut.setAttribute('aria-pressed', 'false');
+        var ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg'), use = document.createElementNS(ns, 'use');
+        svg.setAttribute('class', 'ic'); svg.setAttribute('aria-hidden', 'true'); use.setAttribute('href', '#ic-eye'); svg.appendChild(use); nut.appendChild(svg);
+        nut.addEventListener('click', function () {
+            var hien = o.type === 'password'; o.type = hien ? 'text' : 'password';
+            nut.setAttribute('aria-pressed', hien); nut.setAttribute('aria-label', hien ? 'Ẩn mật khẩu' : 'Hiện mật khẩu');
+            use.setAttribute('href', hien ? '#ic-eye-off' : '#ic-eye');
+        });
+        bao.appendChild(nut);
+    });
+</script>

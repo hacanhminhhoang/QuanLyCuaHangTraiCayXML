@@ -15,18 +15,22 @@
     <html>
       <head>
         <meta charset="utf-8"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@700&amp;family=Noto+Sans:wght@400;600&amp;display=swap"/>
         <title><xsl:value-of select="$TieuDe"/></title>
         <style>
-          body { font-family: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif; color: #1d2a1f; background: #f5f7f2; margin: 0; padding: 32px 16px; }
-          .giay { max-width: 1100px; margin: 0 auto; background: #fff; border: 1px solid #e2e8dc; border-radius: 12px; padding: 32px; box-shadow: 0 4px 16px rgba(23,48,27,.06); }
-          h1 { color: #2e7d32; margin: 0; font-size: 1.6rem; }
-          .phu { color: #5c6b5e; margin: 4px 0 20px; }
-          table { border-collapse: collapse; width: 100%; font-size: .92rem; }
-          th { text-align: left; font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; color: #5c6b5e; padding: 10px 12px; border-bottom: 2px solid #e2e8dc; }
-          td { padding: 10px 12px; border-bottom: 1px solid #eef2ea; }
+          :root { color-scheme: light dark; --bg: #f0f7f3; --card: #ffffff; --fg: #0f172a; --muted: #475569; --border: #d5e5dc; --primary: #047857; --accent: #b45309; --tint: #e7f5ec; }
+          @media (prefers-color-scheme: dark) { :root { --bg: #0b1712; --card: #12241c; --fg: #e7f3ec; --muted: #a7bcb1; --border: #27443a; --primary: #6ee7b7; --accent: #fbbf24; --tint: #16301f; } }
+          body { font-family: "Noto Sans", "Segoe UI", system-ui, sans-serif; line-height: 1.5; color: var(--fg); background: var(--bg); margin: 0; padding: 32px 16px; }
+          .giay { max-width: 1100px; margin: 0 auto; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; }
+          h1 { font-family: "Be Vietnam Pro", "Noto Sans", sans-serif; color: var(--primary); margin: 0; font-size: 1.75rem; text-wrap: balance; }
+          .phu { color: var(--muted); margin: 4px 0 20px; }
+          table { border-collapse: collapse; width: 100%; font-size: .9375rem; }
+          th { text-align: left; font-size: .8125rem; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); padding: 10px 12px; border-bottom: 2px solid var(--border); }
+          td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+          tbody tr:hover td { background: var(--tint); }
           .so { text-align: right; font-variant-numeric: tabular-nums; }
-          @media print { body { background: #fff; padding: 0; } .giay { border: 0; box-shadow: none; } }
-          code { font-size: .85em; text-transform: none; color: #1b5e20; }
+          @media print { :root { --bg: #fff; --card: #fff; --fg: #000; --muted: #333; --border: #bbb; --primary: #065f46; --accent: #92400e; } body { padding: 0; } .giay { border: 0; } }
+          code { font-size: .85em; text-transform: none; color: var(--primary); }
         </style>
       </head>
       <body>

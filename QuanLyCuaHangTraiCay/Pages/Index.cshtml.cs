@@ -10,6 +10,8 @@ namespace QuanLyCuaHangTraiCay.Pages
         public int SoTraiCay, SoKhachHang, SoHoaDonThang;
         public decimal DoanhThuThang, DoanhThuHomNay;
         public List<DataRow> SapHetHang, HoaDonGanDay;
+        public List<KeyValuePair<DateTime, decimal>> BayNgay;   // doanh thu từng ngày trong 7 ngày gần nhất (cũ -> mới)
+        public decimal LonNhat7Ngay;
         public Dictionary<string, string> TenKhach;
 
         public void OnGet()
@@ -29,6 +31,9 @@ namespace QuanLyCuaHangTraiCay.Pages
             HoaDonGanDay = hoaDon.AsEnumerable().OrderByDescending(r => r.Field<DateTime>("NgayLap"))
                 .ThenByDescending(r => r.Field<string>("MaHD")).Take(5).ToList();
             TenKhach = DinhDang.TuDien("KhachHang", "MaKH", "TenKH");
+            BayNgay = Enumerable.Range(0, 7).Select(i => homNay.AddDays(i - 6))
+                .Select(d => new KeyValuePair<DateTime, decimal>(d, hoaDon.AsEnumerable().Where(r => r.Field<DateTime>("NgayLap").Date == d).Sum(r => r.Field<decimal>("TongTien")))).ToList();
+            LonNhat7Ngay = BayNgay.Max(x => x.Value);
         }
     }
 }

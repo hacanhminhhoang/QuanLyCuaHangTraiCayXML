@@ -14,7 +14,7 @@ Phụ trách: **D** = Lâm Hưng Thiên Doanh (2415053122206), **H** = Hà Cản
       người còn lại review rồi mới merge.
 
 ### 2. Kiểm thử trên máy — N-14 (D + H)
-- [ ] Mỗi người chạy toàn bộ 71 test trong [KiemThu.md](KiemThu.md) trên máy mình (ít nhất 1 máy có SQL Server cho phần G).
+- [ ] Mỗi người chạy toàn bộ 77 test trong [KiemThu.md](KiemThu.md) trên máy mình (ít nhất 1 máy có SQL Server cho phần G).
 - [ ] Ghi kết quả vào mục 5 của KiemThu.md, chụp ảnh các test quan trọng (TC21, TC26, TC35, TC38, TC39, TC40).
 - [ ] Lỗi tìm được → tạo Issue → sửa trên branch `fix/...` → Pull Request.
 

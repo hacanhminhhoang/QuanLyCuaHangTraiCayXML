@@ -6,13 +6,13 @@
         <h1>Phiếu nhập hàng</h1>
         <p class="phu">@Model.DanhSach.Count phiếu · tổng tiền nhập <b>@DinhDang.Tien(Model.TongNhap)</b></p>
     </div>
-    <a class="nut nut-chinh" href="/NhapHang">+ Nhập hàng</a>
+    <a class="nut nut-chinh" href="/NhapHang"><svg class="ic" aria-hidden="true"><use href="#ic-plus" /></svg>Nhập hàng</a>
 </header>
 
 <form method="get" class="the thanh-loc">
     <label>Từ ngày <input type="date" name="tu" value="@Model.Tu?.ToString("yyyy-MM-dd")" /></label>
     <label>Đến ngày <input type="date" name="den" value="@Model.Den?.ToString("yyyy-MM-dd")" /></label>
-    <button class="nut" type="submit">Lọc</button>
+    <button class="nut" type="submit"><svg class="ic" aria-hidden="true"><use href="#ic-filter" /></svg>Lọc</button>
     <a class="nut nut-nhe" href="/PhieuNhap">Tất cả</a>
 </form>
 
@@ -20,7 +20,8 @@
     <section class="the">
         <div class="cuon-ngang">
             <table class="bang">
-                <thead><tr><th>Mã PN</th><th>Ngày nhập</th><th>Nhà cung cấp</th><th>Nhân viên</th><th class="so">Tổng tiền</th></tr></thead>
+                <caption class="sr-only">Danh sách phiếu nhập</caption>
+                <thead><tr><th scope="col">Mã PN</th><th scope="col">Ngày nhập</th><th scope="col">Nhà cung cấp</th><th scope="col">Nhân viên</th><th scope="col" class="so">Tổng tiền</th></tr></thead>
                 <tbody>
                     @foreach (var r in Model.DanhSach)
                     {
@@ -35,7 +36,7 @@
                     }
                     @if (Model.DanhSach.Count == 0)
                     {
-                        <tr><td colspan="5" class="trong">Không có phiếu nhập trong khoảng thời gian này.</td></tr>
+                        <tr><td colspan="5" class="trong"><svg class="ic" aria-hidden="true"><use href="#ic-clipboard" /></svg>Không có phiếu nhập trong khoảng thời gian này.</td></tr>
                     }
                 </tbody>
             </table>
@@ -56,7 +57,8 @@
             </dl>
             <div class="cuon-ngang">
                 <table class="bang">
-                    <thead><tr><th>Trái cây</th><th class="so">SL</th><th class="so">Đơn giá nhập</th><th class="so">Thành tiền</th></tr></thead>
+                    <caption class="sr-only">Chi tiết phiếu nhập @pn["MaPN"]</caption>
+                    <thead><tr><th scope="col">Trái cây</th><th scope="col" class="so">SL</th><th scope="col" class="so">Đơn giá nhập</th><th scope="col" class="so">Thành tiền</th></tr></thead>
                     <tbody>
                         @foreach (var c in Model.ChiTiet)
                         {
@@ -68,7 +70,7 @@
                             </tr>
                         }
                     </tbody>
-                    <tfoot><tr><th colspan="3">Tổng tiền</th><th class="so">@DinhDang.Tien(pn["TongTien"])</th></tr></tfoot>
+                    <tfoot><tr><th scope="row" colspan="3">Tổng tiền</th><th class="so">@DinhDang.Tien(pn["TongTien"])</th></tr></tfoot>
                 </table>
             </div>
             @if (User.LaAdmin())
@@ -76,7 +78,7 @@
                 <div class="hang-nut">
                     <form method="post" asp-page-handler="Xoa" onsubmit="return confirm('Xóa phiếu nhập @pn["MaPN"] và trừ lại tồn kho?')">
                         <input type="hidden" name="maXoa" value="@pn["MaPN"]" />
-                        <button class="nut nut-nguy-hiem" type="submit">Xóa phiếu nhập</button>
+                        <button class="nut nut-nguy-hiem" type="submit"><svg class="ic" aria-hidden="true"><use href="#ic-trash" /></svg>Xóa phiếu nhập</button>
                     </form>
                 </div>
             }

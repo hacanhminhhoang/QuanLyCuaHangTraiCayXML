@@ -66,7 +66,7 @@ Từ TC09 trở đi đăng nhập bằng `admin`.
 
 | Mã | Các bước | Kết quả mong đợi | KQ |
 |---|---|---|---|
-| TC09 | Xem trang **Tổng quan** | Có 4 thẻ số liệu (doanh thu tháng, hôm nay, loại trái cây, khách hàng), bảng Hóa đơn gần đây, danh sách Sắp hết hàng | |
+| TC09 | Xem trang **Tổng quan** | Có 4 thẻ số liệu (doanh thu tháng, hôm nay, loại trái cây, khách hàng), biểu đồ doanh thu 7 ngày, danh sách Cần nhập thêm, bảng Hóa đơn gần đây | |
 | TC10 | Bấm vào mã một hóa đơn trong "Hóa đơn gần đây" | Mở trang Hóa đơn và hiện đúng chi tiết hóa đơn đó | |
 
 ### C. Danh mục (Trái cây, Nhà cung cấp, Khách hàng, Nhân viên, Tài khoản)
@@ -110,9 +110,9 @@ Từ TC09 trở đi đăng nhập bằng `admin`.
 
 | Mã | Các bước | Kết quả mong đợi | KQ |
 |---|---|---|---|
-| TC33 | **Trái cây** → **Xem bằng XSLT ↗** | Tab mới hiện "DANH SÁCH TRÁI CÂY" do `DanhSach.xslt` tạo, tiêu đề cột là tên thẻ XML | |
-| TC34 | Tìm `Mỹ` rồi bấm **Xem bằng XSLT ↗** | Trang XSLT chỉ còn dòng Táo Envy, có ghi "từ khóa: Mỹ" | |
-| TC35 | **Hóa đơn** → chọn HD001 → **In hóa đơn (XSLT) ↗** | Hóa đơn có tên khách Phạm Thu Hà, nhân viên Trần Thị Bình, 2 dòng, tổng `280,000 đ` (ghép 5 file XML bằng `document()`) | |
+| TC33 | **Trái cây** → **Xem bằng XSLT** | Tab mới hiện "DANH SÁCH TRÁI CÂY" do `DanhSach.xslt` tạo, tiêu đề cột là tên thẻ XML | |
+| TC34 | Tìm `Mỹ` rồi bấm **Xem bằng XSLT** | Trang XSLT chỉ còn dòng Táo Envy, có ghi "từ khóa: Mỹ" | |
+| TC35 | **Hóa đơn** → chọn HD001 → **In hóa đơn (XSLT)** | Hóa đơn có tên khách Phạm Thu Hà, nhân viên Trần Thị Bình, 2 dòng, tổng `280,000 đ` (ghép 5 file XML bằng `document()`) | |
 | TC36 | Ở trang hóa đơn bấm **Ctrl+P** | Bản in gọn, nền trắng | |
 | TC37 | Gõ `http://localhost:5080/Xslt?bang=abc` | Lỗi 404 (không cho đọc bảng không có trong danh sách) | |
 
@@ -122,10 +122,10 @@ Chuẩn bị: đã chạy script SQL ở bước 2 và khôi phục dữ liệu 
 
 | Mã | Các bước | Kết quả mong đợi | KQ |
 |---|---|---|---|
-| TC38 | Mở **Dữ liệu XML** | Bảng kiểm tra hiện 9 file đều "✓ Hợp lệ" kèm số dòng (NhanVien 3, TaiKhoan 3, NhaCungCap 3, TraiCay 8, KhachHang 3, HoaDon 2, ChiTietHoaDon 3, PhieuNhap 1, ChiTietPhieuNhap 2) | |
+| TC38 | Mở **Dữ liệu XML** | Bảng kiểm tra hiện 9 file đều có nhãn xanh "Hợp lệ" kèm số dòng (NhanVien 3, TaiKhoan 3, NhaCungCap 3, TraiCay 8, KhachHang 3, HoaDon 2, ChiTietHoaDon 3, PhieuNhap 1, ChiTietPhieuNhap 2) | |
 | TC39 | Thêm 1 khách hàng trên web → **Cập nhật CSDL từ XML** → OK. Trong SSMS chạy câu SQL bên dưới | Báo "Đã cập nhật CSDL SQL Server từ các file XML."; SSMS thấy KhachHang có 4 dòng, có khách hàng vừa thêm | |
 | TC40 | Trong SSMS sửa giá rồi trên web bấm **Tạo XML từ CSDL** → OK (câu SQL bên dưới) | Báo "Đã tạo lại 9 file XML từ SQL Server."; trang Trái cây hiện Xoài cát Hòa Lộc giá `70.000`; `Data/TraiCay.xml` có `<DonGia>70000</DonGia>` | |
-| TC41 | Mở `Data/TraiCay.xml` bằng Notepad, đổi một `<SoLuongTon>` thành `-5`, lưu → vào **Dữ liệu XML** | TraiCay.xml "✗ 1 lỗi", có ghi số dòng bị lỗi | |
+| TC41 | Mở `Data/TraiCay.xml` bằng Notepad, đổi một `<SoLuongTon>` thành `-5`, lưu → vào **Dữ liệu XML** | TraiCay.xml có nhãn đỏ "1 lỗi", có ghi số dòng bị lỗi | |
 | TC42 | Giữ file lỗi ở TC41, bấm **Cập nhật CSDL từ XML** | Báo "Lỗi: TraiCay.xml không hợp lệ: ..."; trong SSMS dữ liệu **không** thay đổi | |
 | TC43 | Mở `Data/KhachHang.xml`, xóa một thẻ đóng `</KhachHang>`, lưu → vào **Dữ liệu XML** | KhachHang.xml báo "Lỗi cú pháp XML: ..." | |
 | TC44 | Khôi phục dữ liệu mẫu. Tắt dịch vụ SQL Server (Services → SQL Server → Stop) → bấm **Tạo XML từ CSDL** | Báo "Lỗi: ..." (không kết nối được); các file XML vẫn còn nguyên | |
@@ -150,7 +150,7 @@ UPDATE TraiCay SET DonGia = 70000 WHERE MaTC = N'TC001';
 
 | Mã | Các bước | Kết quả mong đợi | KQ |
 |---|---|---|---|
-| TC46 | Nhấn **F12** → biểu tượng điện thoại (Toggle device toolbar) → chọn iPhone 12 Pro | Menu chuyển lên trên, không có thanh cuộn ngang, bảng cuộn ngang bên trong thẻ | |
+| TC46 | Nhấn **F12** → biểu tượng điện thoại (Toggle device toolbar) → chọn iPhone 12 Pro | Thanh bên thu gọn: có nút ☰ "Mở menu" ở thanh trên cùng, bấm thì menu kéo ra từ bên trái, bấm nền mờ hoặc phím Esc để đóng; không có thanh cuộn ngang, bảng cuộn ngang bên trong thẻ | |
 | TC47 | Dùng phím **Tab** đi qua form Đăng nhập và form Thêm trái cây | Ô đang chọn có viền xanh rõ ràng, thứ tự hợp lý | |
 
 ### I. Nhập hàng (phiếu nhập)
@@ -171,7 +171,7 @@ UPDATE TraiCay SET DonGia = 70000 WHERE MaTC = N'TC001';
 | TC56 | **Lập hóa đơn** bán 35 Sầu riêng Ri6 (tồn còn `5`), rồi vào **Phiếu nhập** → PN002 → **Xóa phiếu nhập** → OK | Báo "Không thể xóa phiếu PN002: tồn kho Sầu riêng Ri6 chỉ còn 5, ít hơn số đã nhập (10), vì một phần đã được bán."; tồn kho không đổi | |
 | TC57 | **Hóa đơn & doanh thu** → xóa hóa đơn vừa lập (tồn Sầu riêng về `40`), rồi xóa phiếu PN002 | Báo "Đã xóa phiếu nhập PN002 và trừ lại tồn kho."; tồn Sầu riêng về `30`, Cam sành về `80` | |
 | TC58 | Đăng xuất, đăng nhập `binh` / `123` → **Phiếu nhập**; sau đó **Nhập hàng** → Vựa trái cây Hòa Khánh → Nho xanh `10` × `50000` → Lưu | Không có nút **Xóa phiếu nhập**; nhân viên vẫn lập được phiếu mới | |
-| TC59 | Đăng nhập `admin`; **Lập hóa đơn** bán 1 Kiwi vàng (tồn còn `19`); mở **Tổng quan** | Mục "Sắp hết hàng" có Kiwi vàng kèm liên kết **Nhập thêm**; bấm vào mở trang Nhập hàng đã chọn sẵn "Công ty Nhập khẩu Fresh Fruit" | |
+| TC59 | Đăng nhập `admin`; **Lập hóa đơn** bán 1 Kiwi vàng (tồn còn `19`); mở **Tổng quan** | Mục "Cần nhập thêm" có Kiwi vàng (nhãn "19 · Sắp hết") kèm liên kết **Nhập thêm**; bấm vào mở trang Nhập hàng đã chọn sẵn "Công ty Nhập khẩu Fresh Fruit" | |
 
 ### J. RSS bảng giá
 
@@ -192,8 +192,19 @@ UPDATE TraiCay SET DonGia = 70000 WHERE MaTC = N'TC001';
 | TC67 | **Tài khoản** → Sửa `thu`: ô Mật khẩu **để trống**, đổi quyền sang Admin → Lưu; đăng xuất, đăng nhập `thu` / `abc123` | Ô Mật khẩu không điền sẵn gì (gợi ý "Để trống = giữ nguyên"); mật khẩu cũ vẫn dùng được; menu có Dữ liệu XML | |
 | TC68 | Sửa `thu`, nhập mật khẩu mới `xyz789` → Lưu; đăng nhập thử `abc123` rồi `xyz789` | `abc123` bị từ chối ("Sai tên đăng nhập hoặc mật khẩu."), `xyz789` đăng nhập được | |
 | TC69 | **Tài khoản** → nhập tên đăng nhập mới nhưng **không nhập mật khẩu** → **Thêm mới** | Trình duyệt chặn lại và nhắc điền ô Mật khẩu (nếu vượt qua được, máy chủ cũng từ chối: "Vui lòng nhập tên đăng nhập và mật khẩu.") | |
-| TC70 | Trong Notepad sửa `<MatKhau>` của `binh` thành `123` (mật khẩu thường), lưu → vào **Dữ liệu XML** (nhớ khôi phục dữ liệu sau khi xong) | TaiKhoan.xml báo "✗ 1 lỗi" (lược đồ chỉ chấp nhận 64 ký tự hex) | |
+| TC70 | Trong Notepad sửa `<MatKhau>` của `binh` thành `123` (mật khẩu thường), lưu → vào **Dữ liệu XML** (nhớ khôi phục dữ liệu sau khi xong) | TaiKhoan.xml có nhãn đỏ "1 lỗi" (lược đồ chỉ chấp nhận 64 ký tự hex) | |
 | TC71 | **Tài khoản** → ô tìm kiếm gõ `8da1` (đầu chuỗi băm của `admin`) | "Không có dữ liệu phù hợp." — không tìm được theo chuỗi băm | |
+
+### L. Giao diện (thiết kế lại)
+
+| Mã | Các bước | Kết quả mong đợi | KQ |
+|---|---|---|---|
+| TC72 | Đặt trình duyệt/Windows sang chế độ tối (hoặc F12 → ⋮ → More tools → Rendering → *Emulate CSS prefers-color-scheme: dark*), mở **Tổng quan** và **Trái cây** | Giao diện chuyển sang nền tối, chữ, bảng, nút và nhãn tồn kho vẫn đọc rõ; trang đăng nhập cũng tối | |
+| TC73 | Mở trang bất kỳ, bấm **Tab** một lần từ đầu trang | Mục đầu tiên được chọn là liên kết "Bỏ qua điều hướng, đến nội dung chính"; bấm Enter thì nhảy xuống nội dung; mọi nút, liên kết, ô nhập khi được chọn đều có viền focus rõ | |
+| TC74 | Trang **Đăng nhập**: nhập mật khẩu rồi bấm biểu tượng con mắt ở cuối ô | Mật khẩu hiện ra dạng chữ; bấm lần nữa thì ẩn lại (cũng có ở trang Đổi mật khẩu) | |
+| TC75 | **Trái cây**: xem cột Số lượng tồn của trái cây có tồn dưới 20 và bằng 0 | Có chữ và biểu tượng, không chỉ màu: "15 · Sắp hết" (biểu tượng cảnh báo), "0 · Hết hàng" (biểu tượng lỗi) | |
+| TC76 | **Nhà cung cấp** → Sửa NCC001 → SĐT `12345` → Lưu | Tiêu điểm tự nhảy vào khung báo lỗi; liên kết "Đến ô cần sửa" đưa tới ô SĐT; ô viền đỏ và có dòng gợi ý "Cần 10 chữ số, bắt đầu bằng 0." ngay dưới ô | |
+| TC77 | **Tổng quan**: xem biểu đồ "Doanh thu 7 ngày gần nhất" | Có 7 cột, mỗi cột ghi số tiền và ngày; ngày hôm nay in đậm; tổng ở góc phải bằng tổng các cột; ngày không có hóa đơn hiện cột xám mảnh ghi 0 | |
 
 ## 4. Xử lý sự cố thường gặp
 
@@ -215,7 +226,7 @@ UPDATE TraiCay SET DonGia = 70000 WHERE MaTC = N'TC001';
 | Người kiểm thử | |
 | Ngày | |
 | Máy (Windows, phiên bản SQL Server) | |
-| Số test đạt / tổng | ... / 71 |
+| Số test đạt / tổng | ... / 77 |
 
 | Mã test | Mô tả lỗi | Ảnh chụp | Link Issue |
 |---|---|---|---|

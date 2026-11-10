@@ -26,7 +26,7 @@
     <section class="the">
         @if (Model.Loi != null)
         {
-            <div class="alert alert-loi" role="alert">@Model.Loi</div>
+            <div class="alert alert-loi" role="alert" id="tom-tat-loi" tabindex="-1"><svg class="ic" aria-hidden="true"><use href="#ic-error" /></svg><span>@Model.Loi</span></div>
         }
         @if (Model.TraiCay.Count == 0)
         {
@@ -36,7 +36,8 @@
         {
             <div class="cuon-ngang">
                 <table class="bang bang-chon">
-                    <thead><tr><th>Trái cây</th><th class="so">Giá bán</th><th class="so">Tồn</th><th class="so">Số lượng nhập</th><th class="so">Đơn giá nhập</th><th class="so">Thành tiền</th></tr></thead>
+                    <caption class="sr-only">Nhập số lượng và đơn giá nhập cho từng trái cây</caption>
+                    <thead><tr><th scope="col">Trái cây</th><th scope="col" class="so">Giá bán</th><th scope="col" class="so">Tồn</th><th scope="col" class="so">Số lượng nhập</th><th scope="col" class="so">Đơn giá nhập</th><th scope="col" class="so">Thành tiền</th></tr></thead>
                     <tbody>
                         @foreach (DataRow r in Model.TraiCay)
                         {
@@ -45,7 +46,7 @@
                             <tr>
                                 <td><b>@r["TenTC"]</b><small class="phu"> @ma</small></td>
                                 <td class="so">@DinhDang.So(r["DonGia"])<small class="phu">/@r["DonViTinh"]</small></td>
-                                <td class="so"><span class="badge @(ton == 0 ? "badge-do" : ton < 20 ? "badge-cam" : "badge-xanh")">@ton</span></td>
+                                <td class="so"><partial name="_TonKho" model="ton" /></td>
                                 <td class="so"><input class="o-so-luong o-sl" type="number" name="sl_@ma" min="0" step="1" placeholder="0"
                                        value="@Model.SoLuong.GetValueOrDefault(ma, "")" aria-label="Số lượng nhập @r["TenTC"]" /></td>
                                 <td class="so"><input class="o-so-luong o-gia" type="number" name="gia_@ma" min="0" step="1" placeholder="0"
@@ -58,20 +59,24 @@
             </div>
         }
     </section>
-    <aside class="the tom-tat">
+    <aside class="the tom-tat" aria-label="Thông tin phiếu nhập">
         <h2>Thông tin phiếu nhập</h2>
-        <label>Nhà cung cấp</label>
+        <p class="phu" style="margin-top:12px">Nhà cung cấp</p>
         <p class="gia-tri">@(Model.NhaCungCap.AsEnumerable().Where(n => n.Field<string>("MaNCC") == Model.MaNCC).Select(n => n.Field<string>("TenNCC")).FirstOrDefault())</p>
-        <label for="ngay">Ngày nhập</label>
+        <label for="ngay">Ngày nhập<span class="dau-sao" aria-hidden="true">*</span></label>
         <input id="ngay" type="date" name="NgayNhap" value="@Model.NgayNhap.ToString("yyyy-MM-dd")" required />
-        <label>Nhân viên</label>
+        <p class="phu" style="margin-top:12px">Nhân viên lập</p>
         <p class="gia-tri">@User.HoTen()</p>
         <div class="tong-tien"><span>Tổng tiền nhập</span><b id="tong">0 đ</b></div>
-        <button class="nut nut-chinh nut-rong" type="submit">Lưu phiếu nhập</button>
+        <button class="nut nut-chinh nut-rong" type="submit"><svg class="ic" aria-hidden="true"><use href="#ic-ok" /></svg>Lưu phiếu nhập</button>
     </aside>
 </form>
 
 @section Scripts {
+@if (Model.Loi != null)
+{
+    <script>document.getElementById('tom-tat-loi').focus();</script>
+}
 <script>
     // Tính thành tiền ngay trên trình duyệt (server vẫn kiểm tra và tính lại khi lưu)
     const vnd = n => n.toLocaleString('vi-VN') + ' đ';
