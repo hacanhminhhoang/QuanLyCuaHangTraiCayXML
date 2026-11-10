@@ -8,7 +8,7 @@
 <form method="post" class="the form-hep">
     @if (Model.Loi != null)
     {
-        <div class="alert alert-loi" role="alert">@Model.Loi</div>
+        <div class="alert alert-loi" role="alert" id="tom-tat-loi" tabindex="-1"><svg class="ic" aria-hidden="true"><use href="#ic-error" /></svg><span>@Model.Loi</span></div>
     }
     <label for="cu">Mật khẩu hiện tại</label>
     <input id="cu" name="MatKhauCu" type="password" autocomplete="current-password" required />
@@ -17,7 +17,14 @@
     <label for="lai">Nhập lại mật khẩu mới</label>
     <input id="lai" name="NhapLai" type="password" autocomplete="new-password" required />
     <div class="hang-nut">
-        <button class="nut nut-chinh" type="submit">Lưu mật khẩu</button>
+        <button class="nut nut-chinh" type="submit"><svg class="ic" aria-hidden="true"><use href="#ic-lock" /></svg>Lưu mật khẩu</button>
         <a class="nut" href="/">Hủy</a>
     </div>
 </form>
+@section Scripts {
+    <partial name="_HienMatKhau" />
+    @if (Model.Loi != null)
+    {
+        <script>document.getElementById('tom-tat-loi').focus();</script>
+    }
+}

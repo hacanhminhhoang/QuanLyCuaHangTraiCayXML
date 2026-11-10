@@ -60,7 +60,7 @@ namespace QuanLyCuaHangTraiCay.Pages
         public bool DangSua;                                   // đang sửa 1 dòng có sẵn
         public Dictionary<string, string> GiaTri = new Dictionary<string, string>();
         public Dictionary<string, Dictionary<string, string>> LienKet = new Dictionary<string, Dictionary<string, string>>();
-        public string Loi, ChiTietLoi, TruongLoi;   // TruongLoi: tên cột gây lỗi XSD (để tô đỏ ô nhập)
+        public string Loi, ChiTietLoi, TruongLoi, GoiYLoi;   // TruongLoi: tên cột gây lỗi XSD (để tô đỏ ô nhập)
 
         string Khoa { get { return CauHinh.Cot[0].Ten; } }
 
@@ -158,6 +158,7 @@ namespace QuanLyCuaHangTraiCay.Pages
                 TruongLoi = cot.Ten;
                 Loi = "«" + cot.NhanDe + "» không hợp lệ theo lược đồ " + Bang + ".xsd" +
                       (cot.Kieu == "tel" ? " (cần 10 chữ số, bắt đầu bằng 0)." : cot.Kieu == "number" ? " (cần số nguyên không âm)." : ".");
+                GoiYLoi = cot.Kieu == "tel" ? "Cần 10 chữ số, bắt đầu bằng 0." : cot.Kieu == "number" ? "Cần số nguyên không âm." : "Giá trị không đúng định dạng yêu cầu.";
                 ChiTietLoi = thongBao;
             }
             else

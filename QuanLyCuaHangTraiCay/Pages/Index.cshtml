@@ -1,27 +1,68 @@
 @page
 @model IndexModel
-@{ ViewData["Title"] = "Tổng quan"; }
+@{
+    ViewData["Title"] = "Tổng quan";
+    decimal tong7 = Model.BayNgay.Sum(x => x.Value);
+    string tomTat = "Doanh thu 7 ngày gần nhất: " + string.Join("; ", Model.BayNgay.Select(x => x.Key.ToString("dd/MM") + " " + DinhDang.Tien(x.Value)));
+}
 <header class="tieu-de-trang">
     <div>
         <h1>Xin chào, @User.HoTen()</h1>
         <p class="phu">Tình hình cửa hàng hôm nay, @DateTime.Today.ToString("dd/MM/yyyy").</p>
     </div>
-    <a class="nut nut-chinh" href="/LapHoaDon">+ Lập hóa đơn</a>
+    <a class="nut nut-chinh" href="/LapHoaDon"><svg class="ic" aria-hidden="true"><use href="#ic-plus" /></svg>Lập hóa đơn</a>
 </header>
 
 <section class="luoi-thong-ke" aria-label="Số liệu tổng quan">
-    <div class="the thong-ke nhan-manh"><span>Doanh thu tháng này</span><b>@DinhDang.Tien(Model.DoanhThuThang)</b><small>@Model.SoHoaDonThang hóa đơn</small></div>
-    <div class="the thong-ke"><span>Doanh thu hôm nay</span><b>@DinhDang.Tien(Model.DoanhThuHomNay)</b></div>
-    <div class="the thong-ke"><span>Loại trái cây</span><b>@Model.SoTraiCay</b><small>@Model.SapHetHang.Count sắp hết hàng</small></div>
-    <div class="the thong-ke"><span>Khách hàng</span><b>@Model.SoKhachHang</b></div>
+    <div class="the thong-ke nhan-manh"><span>Doanh thu tháng này</span><b>@DinhDang.Tien(Model.DoanhThuThang)</b><small>@Model.SoHoaDonThang hóa đơn</small><span class="bieu-tuong" aria-hidden="true"><svg class="ic"><use href="#ic-chart" /></svg></span></div>
+    <div class="the thong-ke"><span>Doanh thu hôm nay</span><b>@DinhDang.Tien(Model.DoanhThuHomNay)</b><span class="bieu-tuong" aria-hidden="true"><svg class="ic"><use href="#ic-receipt" /></svg></span></div>
+    <div class="the thong-ke"><span>Loại trái cây</span><b>@Model.SoTraiCay</b><small>@Model.SapHetHang.Count cần nhập thêm</small><span class="bieu-tuong" aria-hidden="true"><svg class="ic"><use href="#ic-fruit" /></svg></span></div>
+    <div class="the thong-ke"><span>Khách hàng</span><b>@Model.SoKhachHang</b><span class="bieu-tuong" aria-hidden="true"><svg class="ic"><use href="#ic-users" /></svg></span></div>
 </section>
 
 <div class="luoi-hai-cot">
-    <section class="the">
-        <div class="the-dau"><h2>Hóa đơn gần đây</h2><a href="/HoaDon">Xem tất cả</a></div>
-        <div class="cuon-ngang">
+    <section class="the" aria-labelledby="tieu-de-bieu-do">
+        <div class="the-dau"><h2 id="tieu-de-bieu-do">Doanh thu 7 ngày gần nhất</h2><span class="phu">Tổng: <b>@DinhDang.Tien(tong7)</b></span></div>
+        <div class="bieu-do" role="img" aria-label="@tomTat">
+            @foreach (var ngay in Model.BayNgay)
+            {
+                decimal ty = Model.LonNhat7Ngay > 0 ? ngay.Value / Model.LonNhat7Ngay : 0;
+                <div class="muc @(ngay.Key == DateTime.Today ? "hom-nay" : null)">
+                    <span class="gia-tri-cot">@DinhDang.So(ngay.Value)</span>
+                    <span class="cot @(ngay.Value == 0 ? "rong" : null)" style="--r:@ty.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)"></span>
+                    <span class="ngay">@ngay.Key.ToString("dd/MM")</span>
+                </div>
+            }
+        </div>
+    </section>
+    <section class="the" aria-labelledby="tieu-de-sap-het">
+        <div class="the-dau"><h2 id="tieu-de-sap-het">Cần nhập thêm</h2><span class="phu">tồn dưới @IndexModel.NguongSapHet</span></div>
+        @if (Model.SapHetHang.Count == 0)
+        {
+            <p class="trong"><svg class="ic" aria-hidden="true"><use href="#ic-ok" /></svg>Tất cả trái cây đều đủ hàng.</p>
+        }
+        <ul class="ds-ton">
+            @foreach (var r in Model.SapHetHang)
+            {
+                int ton = (int)r["SoLuongTon"];
+                <li>
+                    <a href="/DanhMuc/TraiCay?ma=@r["MaTC"]">@r["TenTC"]</a>
+                    <span>
+                        <partial name="_TonKho" model="ton" />
+                        <a class="nhap-them" href="/NhapHang?maNCC=@r["MaNCC"]">Nhập thêm<span class="sr-only"> @r["TenTC"]</span></a>
+                    </span>
+                </li>
+            }
+        </ul>
+    </section>
+</div>
+
+<section class="the" aria-labelledby="tieu-de-hoa-don">
+    <div class="the-dau"><h2 id="tieu-de-hoa-don">Hóa đơn gần đây</h2><a href="/HoaDon">Xem tất cả</a></div>
+    <div class="cuon-ngang">
         <table class="bang">
-            <thead><tr><th>Mã HĐ</th><th>Ngày</th><th>Khách hàng</th><th class="so">Tổng tiền</th></tr></thead>
+            <caption class="sr-only">5 hóa đơn gần đây nhất</caption>
+            <thead><tr><th scope="col">Mã HĐ</th><th scope="col">Ngày</th><th scope="col">Khách hàng</th><th scope="col" class="so">Tổng tiền</th></tr></thead>
             <tbody>
                 @foreach (var r in Model.HoaDonGanDay)
                 {
@@ -34,28 +75,9 @@
                 }
                 @if (Model.HoaDonGanDay.Count == 0)
                 {
-                    <tr><td colspan="4" class="trong">Chưa có hóa đơn nào.</td></tr>
+                    <tr><td colspan="4" class="trong"><svg class="ic" aria-hidden="true"><use href="#ic-receipt" /></svg>Chưa có hóa đơn nào. <a href="/LapHoaDon">Lập hóa đơn đầu tiên</a></td></tr>
                 }
             </tbody>
         </table>
-        </div>
-    </section>
-    <section class="the">
-        <div class="the-dau"><h2>Sắp hết hàng</h2><span class="phu">tồn &lt; @IndexModel.NguongSapHet</span></div>
-        @if (Model.SapHetHang.Count == 0)
-        {
-            <p class="trong">Tất cả trái cây đều đủ hàng.</p>
-        }
-        <ul class="ds-ton">
-            @foreach (var r in Model.SapHetHang)
-            {
-                int ton = (int)r["SoLuongTon"];
-                <li>
-                    <a href="/DanhMuc/TraiCay?ma=@r["MaTC"]">@r["TenTC"]</a>
-                    <span><span class="badge @(ton == 0 ? "badge-do" : "badge-cam")">@ton @r["DonViTinh"]</span>
-                    <a class="nhap-them" href="/NhapHang?maNCC=@r["MaNCC"]">Nhập thêm</a></span>
-                </li>
-            }
-        </ul>
-    </section>
-</div>
+    </div>
+</section>

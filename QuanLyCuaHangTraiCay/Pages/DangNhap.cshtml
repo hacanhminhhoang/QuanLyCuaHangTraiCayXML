@@ -3,16 +3,21 @@
 @{ ViewData["Title"] = "Đăng nhập"; }
 <div class="trang-dang-nhap">
     <section class="dn-gioi-thieu" aria-hidden="true">
-        <h1>Fruit Store</h1>
-        <p>Phần mềm quản lý cửa hàng trái cây — dữ liệu lưu bằng XML, kiểm tra bằng XSD, hiển thị bằng XSLT.</p>
-        <ul class="trai-cay-trang-tri"><li>🥭</li><li>🍉</li><li>🍊</li><li>🍇</li><li>🥝</li></ul>
+        <span class="logo-icon"><svg class="ic"><use href="#ic-leaf" /></svg></span>
+        <p class="thuong-hieu">Fruit Store</p>
+        <p>Phần mềm quản lý cửa hàng trái cây: bán hàng, nhập hàng và tồn kho trên dữ liệu XML.</p>
+        <ul class="diem-noi-bat">
+            <li><svg class="ic"><use href="#ic-cart" /></svg>Lập và in hóa đơn nhanh</li>
+            <li><svg class="ic"><use href="#ic-package" /></svg>Nhập hàng, tồn kho tự cập nhật</li>
+            <li><svg class="ic"><use href="#ic-code" /></svg>Dữ liệu XML, kiểm tra bằng XSD</li>
+        </ul>
     </section>
     <form method="post" class="the dn-form">
-        <h2>Đăng nhập</h2>
+        <h1>Đăng nhập</h1>
         <p class="phu">Nhập tài khoản được cấp để tiếp tục.</p>
         @if (Model.Loi != null)
         {
-            <div class="alert alert-loi" role="alert">@Model.Loi</div>
+            <div class="alert alert-loi" role="alert" id="tom-tat-loi" tabindex="-1" style="margin-top:16px;margin-bottom:0"><svg class="ic" aria-hidden="true"><use href="#ic-error" /></svg><span>@Model.Loi</span></div>
         }
         <label for="ten">Tên đăng nhập</label>
         <input id="ten" name="TenDangNhap" value="@Model.TenDangNhap" autocomplete="username" required autofocus />
@@ -23,3 +28,10 @@
         <p class="goi-y">Tài khoản demo: <code>admin / admin</code> (quản lý), <code>binh / 123</code> (nhân viên)</p>
     </form>
 </div>
+@section Scripts {
+    <partial name="_HienMatKhau" />
+    @if (Model.Loi != null)
+    {
+        <script>document.getElementById('tom-tat-loi').focus();</script>
+    }
+}
