@@ -18,16 +18,24 @@
         <meta charset="utf-8"/>
         <title>Hóa đơn <xsl:value-of select="$MaHD"/></title>
         <style>
-          body { font-family: Segoe UI, Arial, sans-serif; width: 700px; margin: 30px auto; }
-          h1, h3 { text-align: center; margin: 4px; }
-          h1 { color: #2e7d32; }
-          table { border-collapse: collapse; width: 100%; margin-top: 15px; }
-          th, td { border: 1px solid #999; padding: 6px 10px; }
-          th { background: #43a047; color: #fff; }
-          .so { text-align: right; }
+          body { font-family: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif; color: #1d2a1f; background: #f5f7f2; margin: 0; padding: 32px 16px; }
+          .giay { max-width: 720px; margin: 0 auto; background: #fff; border: 1px solid #e2e8dc; border-radius: 12px; padding: 32px; box-shadow: 0 4px 16px rgba(23,48,27,.06); }
+          h1 { color: #2e7d32; margin: 0; font-size: 1.6rem; }
+          .phu { color: #5c6b5e; margin: 4px 0 20px; }
+          table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+          th { text-align: left; font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; color: #5c6b5e; padding: 10px 12px; border-bottom: 2px solid #e2e8dc; }
+          td { padding: 10px 12px; border-bottom: 1px solid #eef2ea; }
+          .so { text-align: right; font-variant-numeric: tabular-nums; }
+          @media print { body { background: #fff; padding: 0; } .giay { border: 0; box-shadow: none; } }
+          h1, h3 { text-align: center; }
+          h3 { margin: 4px 0 20px; letter-spacing: .08em; }
+          tfoot th { font-size: 1rem; text-transform: none; letter-spacing: 0; color: #1d2a1f; border-top: 2px solid #e2e8dc; border-bottom: 0; }
+          tfoot .tong { color: #ef6c00; font-size: 1.2rem; }
+          .cam-on { text-align: center; color: #5c6b5e; margin-top: 24px; }
         </style>
       </head>
       <body>
+        <div class="giay">
         <xsl:variable name="hd" select="HoaDon[MaHD = $MaHD]"/>
         <h1>CỬA HÀNG TRÁI CÂY</h1>
         <h3>HÓA ĐƠN BÁN HÀNG</h3>
@@ -55,14 +63,15 @@
                   <td class="so"><xsl:value-of select="format-number(ThanhTien, '#,##0')"/></td>
                 </tr>
               </xsl:for-each>
-              <tr>
-                <th colspan="5" class="so">TỔNG TIỀN</th>
-                <th class="so"><xsl:value-of select="format-number($hd/TongTien, '#,##0')"/> đ</th>
-              </tr>
+              <tfoot><tr>
+                <th colspan="5" class="so">Tổng tiền</th>
+                <th class="so tong"><xsl:value-of select="format-number($hd/TongTien, '#,##0')"/> đ</th>
+              </tr></tfoot>
             </table>
-            <p style="text-align:center"><i>Cảm ơn quý khách!</i></p>
+            <p class="cam-on"><i>Cảm ơn quý khách!</i></p>
           </xsl:otherwise>
         </xsl:choose>
+        </div>
       </body>
     </html>
   </xsl:template>
