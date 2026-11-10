@@ -13,7 +13,7 @@ namespace QuanLyCuaHangTraiCay.Pages
         public string[] LuaChon;     // danh sách cố định -> <select>
         public string BangLienKet;   // khóa ngoại -> <select> lấy từ file XML khác
         public string CotHienThi;    // cột hiển thị của bảng liên kết
-        public string Kieu = "text"; // kiểu ô input: text, number, date, tel
+        public string Kieu = "text"; // kiểu ô input: text, number, date, tel, password (băm SHA-256 trước khi lưu)
         public Cot(string ten, string nhanDe) { Ten = ten; NhanDe = nhanDe; }
     }
 
@@ -45,7 +45,7 @@ namespace QuanLyCuaHangTraiCay.Pages
                 new Cot("GioiTinh", "Giới tính") { LuaChon = new[] { "Nam", "Nữ" } }, new Cot("NgaySinh", "Ngày sinh") { Kieu = "date" },
                 new Cot("DiaChi", "Địa chỉ"), new Cot("SDT", "Số điện thoại") { Kieu = "tel" } } },
             ["TaiKhoan"] = new CauHinhDanhMuc { TieuDe = "Tài khoản", ChiAdmin = true, Cot = new[] {
-                new Cot("TenDangNhap", "Tên đăng nhập"), new Cot("MatKhau", "Mật khẩu"),
+                new Cot("TenDangNhap", "Tên đăng nhập"), new Cot("MatKhau", "Mật khẩu") { Kieu = "password" },
                 new Cot("Quyen", "Quyền") { LuaChon = new[] { "Admin", "NhanVien" } },
                 new Cot("MaNV", "Nhân viên") { BangLienKet = "NhanVien", CotHienThi = "HoTen" } } },
         };
@@ -84,7 +84,7 @@ namespace QuanLyCuaHangTraiCay.Pages
                 // Giữ dòng có ít nhất 1 ô chứa từ khóa (không phân biệt hoa thường), tìm cả theo tên khóa ngoại
                 foreach (DataRow r in DuLieu.Select())
                 {
-                    bool khop = CauHinh.Cot.Any(c =>
+                    bool khop = CauHinh.Cot.Where(c => c.Kieu != "password").Any(c =>   // không tìm trong chuỗi băm mật khẩu
                         Convert.ToString(r[c.Ten]).IndexOf(k, StringComparison.OrdinalIgnoreCase) >= 0 ||
                         (LienKet.ContainsKey(c.Ten) && LienKet[c.Ten].Ten(r[c.Ten]).IndexOf(k, StringComparison.OrdinalIgnoreCase) >= 0));
                     if (!khop) r.Delete();
@@ -100,7 +100,7 @@ namespace QuanLyCuaHangTraiCay.Pages
             DataRow dong = Ma == null ? null : FileXml.HienThi(Bang).AsEnumerable().FirstOrDefault(r => r[Khoa].ToString() == Ma);
             DangSua = dong != null;
             foreach (Cot c in CauHinh.Cot)
-                GiaTri[c.Ten] = DangSua ? DinhDang.Goc(dong[c.Ten]) : "";
+                GiaTri[c.Ten] = DangSua && c.Kieu != "password" ? DinhDang.Goc(dong[c.Ten]) : "";   // không bao giờ điền sẵn mật khẩu
             if (!DangSua && CauHinh.TienTo != null)
                 GiaTri[Khoa] = FileXml.TaoMaMoi(Bang, Khoa, CauHinh.TienTo);
             return Page();
@@ -110,14 +110,20 @@ namespace QuanLyCuaHangTraiCay.Pages
         {
             if (!NapCauHinh()) return CauHinh == null ? NotFound() : Forbid();
             foreach (Cot c in CauHinh.Cot)
-                GiaTri[c.Ten] = (Request.Form[c.Ten].ToString() ?? "").Trim();
+            {
+                string v = Request.Form[c.Ten].ToString() ?? "";
+                GiaTri[c.Ten] = c.Kieu == "password" ? v : v.Trim();   // mật khẩu giữ nguyên khoảng trắng như lúc đăng nhập
+            }
             DangSua = dangSua;
             string ma = GiaTri[Khoa];
-            string[] ten = CauHinh.Cot.Select(c => c.Ten).ToArray();
-            string[] gt = ten.Select(t => GiaTri[t]).ToArray();
+            // Đang sửa mà để trống ô mật khẩu = giữ nguyên mật khẩu cũ (bỏ cột đó khỏi lệnh sửa)
+            Cot[] cot = CauHinh.Cot.Where(c => !(c.Kieu == "password" && dangSua && GiaTri[c.Ten] == "")).ToArray();
+            string[] ten = cot.Select(c => c.Ten).ToArray();
+            // Cột mật khẩu được băm (muối = khóa chính, tức tên đăng nhập) trước khi ghi vào XML
+            string[] gt = cot.Select(c => c.Kieu == "password" ? Class.MatKhau.Bam(ma, GiaTri[c.Ten]) : GiaTri[c.Ten]).ToArray();
             try
             {
-                if (ma == "" || gt[1] == "")
+                if (ma == "" || (GiaTri[CauHinh.Cot[1].Ten] == "" && cot.Any(c => c == CauHinh.Cot[1])))   // cột 2 phải có giá trị, trừ mật khẩu khi đang sửa
                     throw new Exception("Vui lòng nhập " + CauHinh.Cot[0].NhanDe.ToLower() + " và " + CauHinh.Cot[1].NhanDe.ToLower() + ".");
                 if (dangSua)
                 {

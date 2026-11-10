@@ -18,8 +18,8 @@ namespace QuanLyCuaHangTraiCay.Pages
         {
             string ten = (TenDangNhap ?? "").Trim();
             // Tìm tài khoản trong TaiKhoan.xml bằng XPath rồi so sánh mật khẩu
-            string matKhau = FileXml.LayGiaTri("TaiKhoan", "TenDangNhap", ten, "MatKhau");
-            if (ten == "" || matKhau == "" || matKhau != MatKhau)
+            string daBam = FileXml.LayGiaTri("TaiKhoan", "TenDangNhap", ten, "MatKhau");
+            if (ten == "" || daBam == "" || daBam != Class.MatKhau.Bam(ten, MatKhau ?? ""))
             {
                 Loi = "Sai tên đăng nhập hoặc mật khẩu.";
                 return Page();

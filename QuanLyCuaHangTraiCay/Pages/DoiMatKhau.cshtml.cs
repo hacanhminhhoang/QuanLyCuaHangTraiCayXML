@@ -11,14 +11,14 @@ namespace QuanLyCuaHangTraiCay.Pages
         public IActionResult OnPost(string matKhauCu, string matKhauMoi, string nhapLai)
         {
             string ten = User.Identity.Name;
-            if (FileXml.LayGiaTri("TaiKhoan", "TenDangNhap", ten, "MatKhau") != matKhauCu)
+            if (FileXml.LayGiaTri("TaiKhoan", "TenDangNhap", ten, "MatKhau") != MatKhau.Bam(ten, matKhauCu ?? ""))
                 Loi = "Mật khẩu hiện tại không đúng.";
             else if (string.IsNullOrEmpty(matKhauMoi) || matKhauMoi != nhapLai)
                 Loi = "Mật khẩu mới trống hoặc nhập lại không khớp.";
             if (Loi != null) return Page();
             try
             {
-                FileXml.Sua("TaiKhoan", "TenDangNhap", ten, new[] { "MatKhau" }, new[] { matKhauMoi });
+                FileXml.Sua("TaiKhoan", "TenDangNhap", ten, new[] { "MatKhau" }, new[] { MatKhau.Bam(ten, matKhauMoi) });
             }
             catch (Exception ex)
             {
