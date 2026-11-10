@@ -52,7 +52,8 @@
                 int ton = (int)r["SoLuongTon"];
                 <li>
                     <a href="/DanhMuc/TraiCay?ma=@r["MaTC"]">@r["TenTC"]</a>
-                    <span class="badge @(ton == 0 ? "badge-do" : "badge-cam")">@ton @r["DonViTinh"]</span>
+                    <span><span class="badge @(ton == 0 ? "badge-do" : "badge-cam")">@ton @r["DonViTinh"]</span>
+                    <a class="nhap-them" href="/NhapHang?maNCC=@r["MaNCC"]">Nhập thêm</a></span>
                 </li>
             }
         </ul>
