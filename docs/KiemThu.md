@@ -30,7 +30,7 @@ Kết quả phải bắt đầu bằng `8.`.
    ```
 
 2. Tạo CSDL: mở SSMS → **File → Open** `Database/QLCuaHangTraiCay.sql` → nhấn **Execute (F5)**.
-   Script tự xóa CSDL cũ (nếu có) rồi tạo lại 7 bảng và dữ liệu mẫu.
+   Script tự xóa CSDL cũ (nếu có) rồi tạo lại 9 bảng và dữ liệu mẫu. Kết quả đúng: không có dòng đỏ, và có 9 lần "rows affected" = 3, 3, 3, 8, 3, 2, 3, 1, 2.
 3. Nếu SQL Server là bản Express, mở `QuanLyCuaHangTraiCay/appsettings.json` và đổi
    `Data Source=.` thành `Data Source=.\\SQLEXPRESS` (trong file JSON phải viết 2 dấu `\`).
 4. Mở `QuanLyCuaHangTraiCay.sln` bằng Visual Studio → nhấn **F5**. Trình duyệt tự mở `http://localhost:5080`.
@@ -58,7 +58,7 @@ Các test chạy theo thứ tự từ trên xuống, bắt đầu từ dữ li�
 | TC05 | Đang là `binh`, gõ địa chỉ `http://localhost:5080/DuLieu` | Trang "Bạn không có quyền truy cập" | |
 | TC06 | Đang là `binh`, gõ `http://localhost:5080/DanhMuc/TaiKhoan` | Trang "Bạn không có quyền truy cập" | |
 | TC07 | **Đổi mật khẩu**: nhập sai mật khẩu hiện tại | Báo "Mật khẩu hiện tại không đúng." | |
-| TC08 | **Đổi mật khẩu**: `123` → `456` (nhập lại đúng) → Đăng xuất → đăng nhập `binh/456` | Báo "Đổi mật khẩu thành công."; đăng nhập bằng mật khẩu mới được | |
+| TC08 | **Đổi mật khẩu**: `123` → `456` (nhập lại đúng) → Đăng xuất → đăng nhập `binh/456` | Báo "Đổi mật khẩu thành công."; đăng nhập bằng mật khẩu mới được; trong `Data/TaiKhoan.xml` mật khẩu của `binh` là chuỗi băm 64 ký tự khác trước | |
 
 Từ TC09 trở đi đăng nhập bằng `admin`.
 
@@ -80,7 +80,7 @@ Từ TC09 trở đi đăng nhập bằng `admin`.
 | TC15 | Bấm **Xóa** ở dòng TC009 → OK | Dòng bị xóa, báo "Đã xóa TC009." | |
 | TC16 | Mở **Nhà cung cấp**, bấm **Xóa** ở NCC001 → OK | Báo "Không thể xóa NCC001: đang được dùng trong TraiCay.xml." | |
 | TC17 | Mở **Nhân viên**, thêm nhân viên mới (chọn giới tính, ngày sinh bằng ô ngày) | Thêm thành công, mã tự sinh `NV004`, ngày sinh hiển thị dạng dd/MM/yyyy | |
-| TC18 | Mở **Tài khoản**, thêm tài khoản `doanh` / `123`, quyền NhanVien, nhân viên NV003 | Thêm thành công; cột Mật khẩu hiển thị `••••••`; đăng nhập được bằng `doanh/123` | |
+| TC18 | Mở **Tài khoản**, thêm tài khoản `doanh` / `123`, quyền NhanVien, nhân viên NV003 | Thêm thành công; cột Mật khẩu hiển thị `••••••` (file XML chỉ lưu chuỗi băm 64 ký tự); đăng nhập được bằng `doanh/123` | |
 | TC19 | Ở **Tài khoản**, thêm lại tài khoản `doanh` | Báo "Tên đăng nhập 'doanh' đã tồn tại." | |
 | TC20 | Ở **Tài khoản**, bấm **Xóa** dòng `admin` (đang đăng nhập) | Báo "Không thể xóa tài khoản đang đăng nhập." | |
 
@@ -122,14 +122,14 @@ Chuẩn bị: đã chạy script SQL ở bước 2 và khôi phục dữ liệu 
 
 | Mã | Các bước | Kết quả mong đợi | KQ |
 |---|---|---|---|
-| TC38 | Mở **Dữ liệu XML** | Bảng kiểm tra hiện 7 file đều "✓ Hợp lệ" kèm số dòng (NhanVien 3, TaiKhoan 3, NhaCungCap 3, TraiCay 8, KhachHang 3, HoaDon 2, ChiTietHoaDon 3) | |
+| TC38 | Mở **Dữ liệu XML** | Bảng kiểm tra hiện 9 file đều "✓ Hợp lệ" kèm số dòng (NhanVien 3, TaiKhoan 3, NhaCungCap 3, TraiCay 8, KhachHang 3, HoaDon 2, ChiTietHoaDon 3, PhieuNhap 1, ChiTietPhieuNhap 2) | |
 | TC39 | Thêm 1 khách hàng trên web → **Cập nhật CSDL từ XML** → OK. Trong SSMS chạy câu SQL bên dưới | Báo "Đã cập nhật CSDL SQL Server từ các file XML."; SSMS thấy KhachHang có 4 dòng, có khách hàng vừa thêm | |
-| TC40 | Trong SSMS sửa giá rồi trên web bấm **Tạo XML từ CSDL** → OK (câu SQL bên dưới) | Báo "Đã tạo lại 7 file XML từ SQL Server."; trang Trái cây hiện Xoài cát Hòa Lộc giá `70.000`; `Data/TraiCay.xml` có `<DonGia>70000</DonGia>` | |
+| TC40 | Trong SSMS sửa giá rồi trên web bấm **Tạo XML từ CSDL** → OK (câu SQL bên dưới) | Báo "Đã tạo lại 9 file XML từ SQL Server."; trang Trái cây hiện Xoài cát Hòa Lộc giá `70.000`; `Data/TraiCay.xml` có `<DonGia>70000</DonGia>` | |
 | TC41 | Mở `Data/TraiCay.xml` bằng Notepad, đổi một `<SoLuongTon>` thành `-5`, lưu → vào **Dữ liệu XML** | TraiCay.xml "✗ 1 lỗi", có ghi số dòng bị lỗi | |
 | TC42 | Giữ file lỗi ở TC41, bấm **Cập nhật CSDL từ XML** | Báo "Lỗi: TraiCay.xml không hợp lệ: ..."; trong SSMS dữ liệu **không** thay đổi | |
 | TC43 | Mở `Data/KhachHang.xml`, xóa một thẻ đóng `</KhachHang>`, lưu → vào **Dữ liệu XML** | KhachHang.xml báo "Lỗi cú pháp XML: ..." | |
 | TC44 | Khôi phục dữ liệu mẫu. Tắt dịch vụ SQL Server (Services → SQL Server → Stop) → bấm **Tạo XML từ CSDL** | Báo "Lỗi: ..." (không kết nối được); các file XML vẫn còn nguyên | |
-| TC45 | Bật lại SQL Server, bấm **Cập nhật CSDL từ XML** rồi **Tạo XML từ CSDL** | Cả hai thành công; kiểm tra lại (TC38) vẫn 7 file hợp lệ — dữ liệu đi vòng XML → SQL → XML không bị sai | |
+| TC45 | Bật lại SQL Server, bấm **Cập nhật CSDL từ XML** rồi **Tạo XML từ CSDL** | Cả hai thành công; kiểm tra lại (TC38) vẫn 9 file hợp lệ — dữ liệu đi vòng XML → SQL → XML không bị sai | |
 
 Câu SQL dùng trong SSMS:
 
@@ -153,6 +153,48 @@ UPDATE TraiCay SET DonGia = 70000 WHERE MaTC = N'TC001';
 | TC46 | Nhấn **F12** → biểu tượng điện thoại (Toggle device toolbar) → chọn iPhone 12 Pro | Menu chuyển lên trên, không có thanh cuộn ngang, bảng cuộn ngang bên trong thẻ | |
 | TC47 | Dùng phím **Tab** đi qua form Đăng nhập và form Thêm trái cây | Ô đang chọn có viền xanh rõ ràng, thứ tự hợp lý | |
 
+### I. Nhập hàng (phiếu nhập)
+
+**Trước khi làm nhóm I, J, K:** khôi phục dữ liệu mẫu (`git checkout -- QuanLyCuaHangTraiCay/Data`) và chạy lại toàn bộ
+`Database/QLCuaHangTraiCay.sql` trong SSMS, rồi đăng nhập `admin` / `admin`.
+
+| Mã | Các bước | Kết quả mong đợi | KQ |
+|---|---|---|---|
+| TC48 | Mở **Nhập hàng** | Mã phiếu `PN002`; nhà cung cấp mặc định "Vựa trái cây Hòa Khánh" và bảng chỉ có 3 trái cây của nhà này: Nho xanh Ninh Thuận, Thanh long ruột đỏ, Dưa hấu Long An | |
+| TC49 | Đổi nhà cung cấp sang "HTX Trái cây Cái Bè" | Trang tải lại, bảng đổi thành Xoài cát Hòa Lộc, Sầu riêng Ri6, Cam sành | |
+| TC50 | Sầu riêng Ri6: Số lượng nhập `10`, **bỏ trống** Đơn giá nhập → **Lưu phiếu nhập** | Báo "Hãy nhập đơn giá nhập (số nguyên không âm) cho Sầu riêng Ri6."; ô số lượng vẫn còn `10`; không có phiếu nào được lưu | |
+| TC51 | Sầu riêng Ri6: `10` × `100000`; Cam sành: `5` × `20000` | Thành tiền từng dòng hiện ngay (1.000.000 đ, 100.000 đ); **Tổng tiền nhập** `1.100.000 đ` | |
+| TC52 | Bấm **Lưu phiếu nhập** | Chuyển sang **Phiếu nhập**, báo "Đã lưu phiếu nhập PN002 — tổng tiền 1.100.000 đ, tồn kho đã được cộng."; chi tiết PN002 hiện đúng 2 dòng | |
+| TC53 | Mở **Trái cây** | Tồn kho Sầu riêng Ri6 `30 → 40`, Cam sành `80 → 85` | |
+| TC54 | **Phiếu nhập**: xem danh sách; lọc Từ ngày = Đến ngày = 30/10/2026 | Danh sách có PN002 và PN001; sau khi lọc chỉ còn PN001, tổng tiền nhập `1.560.000 đ`; bấm **Tất cả** để bỏ lọc | |
+| TC55 | **Nhập hàng** → HTX Trái cây Cái Bè → không nhập số lượng nào → Lưu | Báo "Phiếu nhập chưa có trái cây nào." | |
+| TC56 | **Lập hóa đơn** bán 35 Sầu riêng Ri6 (tồn còn `5`), rồi vào **Phiếu nhập** → PN002 → **Xóa phiếu nhập** → OK | Báo "Không thể xóa phiếu PN002: tồn kho Sầu riêng Ri6 chỉ còn 5, ít hơn số đã nhập (10), vì một phần đã được bán."; tồn kho không đổi | |
+| TC57 | **Hóa đơn & doanh thu** → xóa hóa đơn vừa lập (tồn Sầu riêng về `40`), rồi xóa phiếu PN002 | Báo "Đã xóa phiếu nhập PN002 và trừ lại tồn kho."; tồn Sầu riêng về `30`, Cam sành về `80` | |
+| TC58 | Đăng xuất, đăng nhập `binh` / `123` → **Phiếu nhập**; sau đó **Nhập hàng** → Vựa trái cây Hòa Khánh → Nho xanh `10` × `50000` → Lưu | Không có nút **Xóa phiếu nhập**; nhân viên vẫn lập được phiếu mới | |
+| TC59 | Đăng nhập `admin`; **Lập hóa đơn** bán 1 Kiwi vàng (tồn còn `19`); mở **Tổng quan** | Mục "Sắp hết hàng" có Kiwi vàng kèm liên kết **Nhập thêm**; bấm vào mở trang Nhập hàng đã chọn sẵn "Công ty Nhập khẩu Fresh Fruit" | |
+
+### J. RSS bảng giá
+
+| Mã | Các bước | Kết quả mong đợi | KQ |
+|---|---|---|---|
+| TC60 | Mở cửa sổ ẩn danh (chưa đăng nhập), gõ `http://localhost:5080/Rss` | Hiện nội dung XML bắt đầu bằng `<rss version="2.0">`, **không** bị chuyển sang trang Đăng nhập | |
+| TC61 | Xem nội dung nguồn tin | Có 8 thẻ `<item>` (mỗi trái cây một thẻ); ví dụ tiêu đề "Xoài cát Hòa Lộc – 65.000 đ/kg", mô tả "Xuất xứ: Tiền Giang. Giá: 65.000 đ/kg. Còn hàng." | |
+| TC62 | Bán hết một loại trái cây (hoặc sửa tồn kho về 0), tải lại `/Rss` | Trái cây đó ghi "Hết hàng."; nguồn tin **không** chứa số lượng tồn cụ thể | |
+| TC63 | (Không bắt buộc) Thêm địa chỉ `http://localhost:5080/Rss` vào một trình đọc RSS cài trên máy (QuiteRSS, Thunderbird → Feeds…) | Trình đọc hiện 8 bài với giá và xuất xứ | |
+| TC64 | Chưa đăng nhập, gõ `http://localhost:5080/DanhMuc/TraiCay`; sau khi đăng nhập, bấm **RSS bảng giá** ở cuối thanh menu | Trang danh mục vẫn chuyển về Đăng nhập; liên kết RSS mở tab mới tới nguồn tin | |
+
+### K. Mật khẩu được băm
+
+| Mã | Các bước | Kết quả mong đợi | KQ |
+|---|---|---|---|
+| TC65 | Mở `QuanLyCuaHangTraiCay/Data/TaiKhoan.xml` bằng Notepad | Thẻ `<MatKhau>` của mọi tài khoản là chuỗi 64 ký tự (0–9, a–f); không thấy `admin` hay `123` | |
+| TC66 | **Tài khoản** → thêm `thu` / `abc123`, quyền NhanVien, nhân viên NV003; mở lại `TaiKhoan.xml` | File có tài khoản `thu` với mật khẩu 64 ký tự hex, **không** chứa `abc123`; đăng nhập `thu` / `abc123` được | |
+| TC67 | **Tài khoản** → Sửa `thu`: ô Mật khẩu **để trống**, đổi quyền sang Admin → Lưu; đăng xuất, đăng nhập `thu` / `abc123` | Ô Mật khẩu không điền sẵn gì (gợi ý "Để trống = giữ nguyên"); mật khẩu cũ vẫn dùng được; menu có Dữ liệu XML | |
+| TC68 | Sửa `thu`, nhập mật khẩu mới `xyz789` → Lưu; đăng nhập thử `abc123` rồi `xyz789` | `abc123` bị từ chối ("Sai tên đăng nhập hoặc mật khẩu."), `xyz789` đăng nhập được | |
+| TC69 | **Tài khoản** → nhập tên đăng nhập mới nhưng **không nhập mật khẩu** → **Thêm mới** | Trình duyệt chặn lại và nhắc điền ô Mật khẩu (nếu vượt qua được, máy chủ cũng từ chối: "Vui lòng nhập tên đăng nhập và mật khẩu.") | |
+| TC70 | Trong Notepad sửa `<MatKhau>` của `binh` thành `123` (mật khẩu thường), lưu → vào **Dữ liệu XML** (nhớ khôi phục dữ liệu sau khi xong) | TaiKhoan.xml báo "✗ 1 lỗi" (lược đồ chỉ chấp nhận 64 ký tự hex) | |
+| TC71 | **Tài khoản** → ô tìm kiếm gõ `8da1` (đầu chuỗi băm của `admin`) | "Không có dữ liệu phù hợp." — không tìm được theo chuỗi băm | |
+
 ## 4. Xử lý sự cố thường gặp
 
 | Hiện tượng | Cách xử lý |
@@ -172,7 +214,7 @@ UPDATE TraiCay SET DonGia = 70000 WHERE MaTC = N'TC001';
 | Người kiểm thử | |
 | Ngày | |
 | Máy (Windows, phiên bản SQL Server) | |
-| Số test đạt / tổng | ... / 47 |
+| Số test đạt / tổng | ... / 71 |
 
 | Mã test | Mô tả lỗi | Ảnh chụp | Link Issue |
 |---|---|---|---|

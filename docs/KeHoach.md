@@ -14,7 +14,7 @@ Phụ trách: **D** = Lâm Hưng Thiên Doanh (2415053122206), **H** = Hà Cản
       người còn lại review rồi mới merge.
 
 ### 2. Kiểm thử trên máy — N-14 (D + H)
-- [ ] Mỗi người chạy toàn bộ 47 test trong [KiemThu.md](KiemThu.md) trên máy mình (ít nhất 1 máy có SQL Server cho phần G).
+- [ ] Mỗi người chạy toàn bộ 71 test trong [KiemThu.md](KiemThu.md) trên máy mình (ít nhất 1 máy có SQL Server cho phần G).
 - [ ] Ghi kết quả vào mục 5 của KiemThu.md, chụp ảnh các test quan trọng (TC21, TC26, TC35, TC38, TC39, TC40).
 - [ ] Lỗi tìm được → tạo Issue → sửa trên branch `fix/...` → Pull Request.
 
@@ -70,13 +70,16 @@ Trước khi demo: khôi phục dữ liệu mẫu (`git checkout -- QuanLyCuaHan
 
 Ưu tiên theo **giá trị cho điểm số / công sức**. Mỗi tính năng làm trên 1 branch `feat/...` và 1 Pull Request.
 
-### P1 — nên làm
+### P1 — ✅ đã hoàn thành
 
-| Tính năng | Lợi ích | Công nghệ XML thể hiện | Công sức | File chính |
-|---|---|---|---|---|
-| **RSS bảng giá trái cây** | Đề bài có nêu "mô tả ứng dụng web service hoặc RSS"; khách đăng ký theo dõi giá | XSLT biến TraiCay.xml thành RSS 2.0 | ~2 giờ | `Data/RSS.xslt`, `Pages/Rss.cshtml(.cs)`, link trong layout |
-| **Phiếu nhập hàng** | Hoàn chỉnh nghiệp vụ: nhập hàng làm tăng tồn kho (hiện chỉ có bán) | 2 file XML + XSD mới (PhieuNhap, ChiTietPhieuNhap), bảng SQL tương ứng | ~4–5 giờ | `Data/PhieuNhap*.xml/.xsd`, `Class/PhieuNhap.cs`, `Pages/NhapHang`, `Database/*.sql`, `FileXml.CacBang` |
-| **Băm mật khẩu SHA-256** | Khắc phục hạn chế đã nêu trong báo cáo (mật khẩu lưu dạng thường) | Cập nhật dữ liệu XML hàng loạt | ~1 giờ | `DangNhap`, `DoiMatKhau`, `DanhMuc` (Tài khoản), `TaiKhoan.xml` |
+| Tính năng | Kết quả | Pull Request |
+|---|---|---|
+| **Băm mật khẩu SHA-256** | `Class/MatKhau.cs`; `TaiKhoan.xsd` chỉ chấp nhận chuỗi 64 ký tự hex nên mật khẩu thường không thể lọt vào file; ô mật khẩu ở trang Tài khoản không bao giờ điền sẵn | #5 |
+| **RSS bảng giá trái cây** | `Data/RSS.xslt` + trang `/Rss` công khai (RSS 2.0, chỉ ghi "Còn hàng / Hết hàng") | #6 |
+| **Phiếu nhập hàng** | 2 bảng mới (XML + XSD + SQL), trang Nhập hàng / Phiếu nhập, cộng tồn kho, xóa phiếu có kiểm tra tồn kho | #7 |
+
+Các lỗi gặp khi test thật đã được sửa: script SQL (comment lồng nhau, PR #3), ghi file XML làm hỏng thẻ rỗng (PR #3),
+máy chỉ có .NET 10 (PR #4).
 
 ### P2 — làm thêm để nổi bật
 
