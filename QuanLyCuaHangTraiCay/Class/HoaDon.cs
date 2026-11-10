@@ -58,7 +58,8 @@ namespace QuanLyCuaHangTraiCay.Class
             }
         }
 
-        static void CongTonKho(string maTC, int soLuong)
+        /// <summary>Cộng (soLuong dương) hoặc trừ (âm) tồn kho của một trái cây trong TraiCay.xml.</summary>
+        internal static void CongTonKho(string maTC, int soLuong)
         {
             int ton = int.Parse(FileXml.LayGiaTri("TraiCay", "MaTC", maTC, "SoLuongTon"));
             FileXml.Sua("TraiCay", "MaTC", maTC, new[] { "SoLuongTon" }, new[] { (ton + soLuong).ToString() });

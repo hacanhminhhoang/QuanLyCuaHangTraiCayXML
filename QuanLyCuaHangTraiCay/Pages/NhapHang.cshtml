@@ -1,0 +1,92 @@
+@page
+@model NhapHangModel
+@{ ViewData["Title"] = "Nhập hàng"; }
+<header class="tieu-de-trang">
+    <div>
+        <h1>Nhập hàng <span class="ma">@Model.MaPN</span></h1>
+        <p class="phu">Chọn nhà cung cấp, nhập số lượng và đơn giá nhập cho từng trái cây. Khi lưu, tồn kho được cộng thêm.</p>
+    </div>
+</header>
+
+<form method="get" class="the thanh-loc">
+    <label>Nhà cung cấp
+        <select name="maNCC" onchange="this.form.submit()" aria-label="Nhà cung cấp">
+            @foreach (DataRow n in Model.NhaCungCap.Rows)
+            {
+                <option value="@n["MaNCC"]" selected="@(n["MaNCC"].ToString() == Model.MaNCC)">@n["TenNCC"]</option>
+            }
+        </select>
+    </label>
+    <noscript><button class="nut" type="submit">Chọn</button></noscript>
+    <span class="phu">Đổi nhà cung cấp sẽ làm mới danh sách trái cây bên dưới.</span>
+</form>
+
+<form method="post" class="luoi-hoa-don">
+    <input type="hidden" name="maNCC" value="@Model.MaNCC" />
+    <section class="the">
+        @if (Model.Loi != null)
+        {
+            <div class="alert alert-loi" role="alert">@Model.Loi</div>
+        }
+        @if (Model.TraiCay.Count == 0)
+        {
+            <p class="trong">Nhà cung cấp này chưa cung cấp trái cây nào. Thêm trái cây ở mục Danh mục → Trái cây.</p>
+        }
+        else
+        {
+            <div class="cuon-ngang">
+                <table class="bang bang-chon">
+                    <thead><tr><th>Trái cây</th><th class="so">Giá bán</th><th class="so">Tồn</th><th class="so">Số lượng nhập</th><th class="so">Đơn giá nhập</th><th class="so">Thành tiền</th></tr></thead>
+                    <tbody>
+                        @foreach (DataRow r in Model.TraiCay)
+                        {
+                            string ma = r["MaTC"].ToString();
+                            int ton = (int)r["SoLuongTon"];
+                            <tr>
+                                <td><b>@r["TenTC"]</b><small class="phu"> @ma</small></td>
+                                <td class="so">@DinhDang.So(r["DonGia"])<small class="phu">/@r["DonViTinh"]</small></td>
+                                <td class="so"><span class="badge @(ton == 0 ? "badge-do" : ton < 20 ? "badge-cam" : "badge-xanh")">@ton</span></td>
+                                <td class="so"><input class="o-so-luong o-sl" type="number" name="sl_@ma" min="0" step="1" placeholder="0"
+                                       value="@Model.SoLuong.GetValueOrDefault(ma, "")" aria-label="Số lượng nhập @r["TenTC"]" /></td>
+                                <td class="so"><input class="o-so-luong o-gia" type="number" name="gia_@ma" min="0" step="1" placeholder="0"
+                                       value="@Model.DonGia.GetValueOrDefault(ma, "")" aria-label="Đơn giá nhập @r["TenTC"]" /></td>
+                                <td class="so thanh-tien">—</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+    <aside class="the tom-tat">
+        <h2>Thông tin phiếu nhập</h2>
+        <label>Nhà cung cấp</label>
+        <p class="gia-tri">@(Model.NhaCungCap.AsEnumerable().Where(n => n.Field<string>("MaNCC") == Model.MaNCC).Select(n => n.Field<string>("TenNCC")).FirstOrDefault())</p>
+        <label for="ngay">Ngày nhập</label>
+        <input id="ngay" type="date" name="NgayNhap" value="@Model.NgayNhap.ToString("yyyy-MM-dd")" required />
+        <label>Nhân viên</label>
+        <p class="gia-tri">@User.HoTen()</p>
+        <div class="tong-tien"><span>Tổng tiền nhập</span><b id="tong">0 đ</b></div>
+        <button class="nut nut-chinh nut-rong" type="submit">Lưu phiếu nhập</button>
+    </aside>
+</form>
+
+@section Scripts {
+<script>
+    // Tính thành tiền ngay trên trình duyệt (server vẫn kiểm tra và tính lại khi lưu)
+    const vnd = n => n.toLocaleString('vi-VN') + ' đ';
+    function tinhTong() {
+        let tong = 0;
+        document.querySelectorAll('tbody tr').forEach(tr => {
+            const sl = parseInt(tr.querySelector('.o-sl')?.value) || 0, gia = parseInt(tr.querySelector('.o-gia')?.value) || 0;
+            const tien = sl * gia;
+            tr.querySelector('.thanh-tien').textContent = tien ? vnd(tien) : '—';
+            tr.classList.toggle('dang-chon', sl > 0);
+            tong += tien;
+        });
+        document.getElementById('tong').textContent = vnd(tong);
+    }
+    document.addEventListener('input', e => { if (e.target.matches('.o-so-luong')) tinhTong(); });
+    tinhTong();
+</script>
+}

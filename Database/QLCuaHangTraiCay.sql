@@ -72,6 +72,23 @@ CREATE TABLE ChiTietHoaDon (
     ThanhTien  DECIMAL(18,0) NOT NULL CHECK (ThanhTien >= 0),
     PRIMARY KEY (MaHD, MaTC)
 );
+
+CREATE TABLE PhieuNhap (
+    MaPN      NVARCHAR(10)  NOT NULL PRIMARY KEY,
+    NgayNhap  DATE          NOT NULL,
+    MaNV      NVARCHAR(10)  NOT NULL REFERENCES NhanVien(MaNV),
+    MaNCC     NVARCHAR(10)  NOT NULL REFERENCES NhaCungCap(MaNCC),
+    TongTien  DECIMAL(18,0) NOT NULL CHECK (TongTien >= 0)
+);
+
+CREATE TABLE ChiTietPhieuNhap (
+    MaPN        NVARCHAR(10)  NOT NULL REFERENCES PhieuNhap(MaPN),
+    MaTC        NVARCHAR(10)  NOT NULL REFERENCES TraiCay(MaTC),
+    SoLuong     INT           NOT NULL CHECK (SoLuong > 0),
+    DonGiaNhap  DECIMAL(18,0) NOT NULL CHECK (DonGiaNhap >= 0),
+    ThanhTien   DECIMAL(18,0) NOT NULL CHECK (ThanhTien >= 0),
+    PRIMARY KEY (MaPN, MaTC)
+);
 GO
 
 -- ---------------- Dữ liệu mẫu (khớp với các file trong thư mục Data) ----------------
@@ -119,5 +136,14 @@ INSERT INTO ChiTietHoaDon (MaHD, MaTC, SoLuong, DonGia, ThanhTien) VALUES
   (N'HD001', N'TC001', 2, 65000, 130000),
   (N'HD001', N'TC003', 1, 150000, 150000),
   (N'HD002', N'TC005', 3, 40000, 120000);
+GO
+
+INSERT INTO PhieuNhap (MaPN, NgayNhap, MaNV, MaNCC, TongTien) VALUES
+  (N'PN001', N'2026-10-30', N'NV001', N'NCC002', 1560000);
+GO
+
+INSERT INTO ChiTietPhieuNhap (MaPN, MaTC, SoLuong, DonGiaNhap, ThanhTien) VALUES
+  (N'PN001', N'TC001', 20, 45000, 900000),
+  (N'PN001', N'TC006', 30, 22000, 660000);
 GO
 

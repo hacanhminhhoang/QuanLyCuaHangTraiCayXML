@@ -21,7 +21,7 @@ namespace QuanLyCuaHangTraiCay.Class
     {
         // Thứ tự bảng từ cha -> con (dùng khi đồng bộ với SQL Server để không vi phạm khóa ngoại)
         public static readonly string[] CacBang =
-            { "NhanVien", "TaiKhoan", "NhaCungCap", "TraiCay", "KhachHang", "HoaDon", "ChiTietHoaDon" };
+            { "NhanVien", "TaiKhoan", "NhaCungCap", "TraiCay", "KhachHang", "HoaDon", "ChiTietHoaDon", "PhieuNhap", "ChiTietPhieuNhap" };
 
         // Thư mục chứa XML/XSD/XSLT và chuỗi kết nối SQL Server: được gán trong Program.cs khi web khởi động
         public static string ThuMuc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
