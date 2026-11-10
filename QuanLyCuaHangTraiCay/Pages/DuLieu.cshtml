@@ -11,7 +11,7 @@
 <div class="luoi-hai-cot">
     <section class="the hanh-dong">
         <h2>Database → XML</h2>
-        <p class="phu">Đọc toàn bộ 7 bảng trong SQL Server và ghi đè các file XML trong thư mục <code>Data</code>.</p>
+        <p class="phu">Đọc toàn bộ @FileXml.CacBang.Length bảng trong SQL Server và ghi đè các file XML trong thư mục <code>Data</code>.</p>
         <form method="post" asp-page-handler="SqlSangXml" onsubmit="return confirm('Ghi đè toàn bộ file XML bằng dữ liệu từ SQL Server?')">
             <button class="nut nut-chinh" type="submit">Tạo XML từ CSDL</button>
         </form>
