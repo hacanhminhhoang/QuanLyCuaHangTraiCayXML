@@ -19,7 +19,7 @@ Kiểm tra .NET đã cài đúng (mở Command Prompt):
 dotnet --version
 ```
 
-Kết quả phải bắt đầu bằng `8.`.
+Kết quả bắt đầu bằng `8.` là tốt nhất. Nếu máy chỉ có .NET 9/10 vẫn chạy được (project cho phép chạy trên runtime mới hơn); nếu F5 báo "You must install or update .NET" thì xem mục 4.
 
 ## 2. Cài đặt và chạy
 
@@ -161,6 +161,7 @@ UPDATE TraiCay SET DonGia = 70000 WHERE MaTC = N'TC001';
 | "Cannot open database QLCuaHangTraiCay" | Chưa chạy script `Database/QLCuaHangTraiCay.sql` |
 | "Login failed for user…" | Tài khoản Windows chưa có quyền trên SQL Server; đăng nhập SSMS bằng Windows Authentication để kiểm tra |
 | Lỗi chứng chỉ SSL khi kết nối | Chuỗi kết nối đã có `TrustServerCertificate=True`; kiểm tra lại nếu đã sửa `appsettings.json` |
+| F5 báo "You must install or update .NET to run this application" (thiếu `Microsoft.AspNetCore.App 8.0.0`) | Cài **ASP.NET Core Runtime 8.0 (x64)** từ https://dotnet.microsoft.com/download/dotnet/8.0, đóng và mở lại Visual Studio. Kiểm tra bằng `dotnet --list-runtimes` |
 | Không chạy được vì cổng 5080 đang bận | Đổi `applicationUrl` trong `Properties/launchSettings.json` (ví dụ `http://localhost:5090`) |
 | Số liệu khác với mô tả trong test case | Khôi phục dữ liệu mẫu bằng `git checkout -- QuanLyCuaHangTraiCay/Data` |
 | Ngày hiển thị dạng mm/dd/yyyy trong ô chọn ngày | Do ngôn ngữ của trình duyệt/Windows, không ảnh hưởng dữ liệu (XML luôn lưu `yyyy-MM-dd`) |

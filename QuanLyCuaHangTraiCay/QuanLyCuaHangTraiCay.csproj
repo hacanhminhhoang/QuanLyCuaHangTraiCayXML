@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <!-- Cho phép app net8.0 chạy trên máy chỉ cài runtime mới hơn (9, 10...) -->
+    <RollForward>Major</RollForward>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>QuanLyCuaHangTraiCay</RootNamespace>
