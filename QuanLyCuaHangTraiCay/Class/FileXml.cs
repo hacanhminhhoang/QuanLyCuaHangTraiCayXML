@@ -31,6 +31,10 @@ namespace QuanLyCuaHangTraiCay.Class
         // ponytail: 1 khóa chung cho mọi file, đủ cho cửa hàng nhỏ; tách khóa theo file nếu cần nhanh hơn
         public static readonly object KhoaGhi = new object();
 
+        // Ghi file có thụt lề. Không dùng XmlDocument.Save(đường dẫn): bộ ghi cũ đó chèn xuống dòng + khoảng trắng
+        // vào thẻ rỗng (<SDT></SDT> thành <SDT>\n    </SDT>), làm file sai lược đồ XSD.
+        static readonly XmlWriterSettings CaiDatGhi = new XmlWriterSettings { Indent = true };
+
         public static string DuongDan(string bang)
         {
             return Path.Combine(ThuMuc, bang + ".xml");
@@ -202,12 +206,10 @@ namespace QuanLyCuaHangTraiCay.Class
                 }
             }
 
-            XmlWriterSettings st = new XmlWriterSettings();
-            st.Indent = true;
             lock (KhoaGhi)
             foreach (DataTable dt in ds)
             {
-                using (XmlWriter w = XmlWriter.Create(DuongDan(dt.TableName), st))
+                using (XmlWriter w = XmlWriter.Create(DuongDan(dt.TableName), CaiDatGhi))
                 {
                     w.WriteStartElement("NewDataSet");
                     foreach (DataRow r in dt.Rows)
@@ -274,7 +276,8 @@ namespace QuanLyCuaHangTraiCay.Class
             List<string> loi = KiemTra(new XmlNodeReader(doc), bang);
             if (loi.Count > 0)
                 throw new Exception("Dữ liệu không hợp lệ theo lược đồ " + bang + ".xsd:\n" + string.Join("\n", loi));
-            doc.Save(DuongDan(bang));
+            using (XmlWriter w = XmlWriter.Create(DuongDan(bang), CaiDatGhi))
+                doc.Save(w);
         }
 
         // Vd: XPath("TraiCay", "MaTC", "TC001") -> /NewDataSet/TraiCay[MaTC='TC001']

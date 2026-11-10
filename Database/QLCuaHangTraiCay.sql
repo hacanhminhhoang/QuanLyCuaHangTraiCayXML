@@ -74,7 +74,7 @@ CREATE TABLE ChiTietHoaDon (
 );
 GO
 
-/* ---------------- Dữ liệu mẫu (khớp với các file Data/*.xml) ---------------- */
+-- ---------------- Dữ liệu mẫu (khớp với các file trong thư mục Data) ----------------
 INSERT INTO NhanVien (MaNV, HoTen, GioiTinh, NgaySinh, DiaChi, SDT) VALUES
   (N'NV001', N'Nguyễn Văn An', N'Nam', N'1990-05-12', N'Hải Châu, Đà Nẵng', N'0905111222'),
   (N'NV002', N'Trần Thị Bình', N'Nữ', N'1998-09-20', N'Liên Chiểu, Đà Nẵng', N'0935333444'),
