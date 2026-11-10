@@ -7,6 +7,7 @@ builder.Services.AddRazorPages(o =>
 {
     o.Conventions.AuthorizeFolder("/");               // mọi trang đều phải đăng nhập...
     o.Conventions.AllowAnonymousToPage("/DangNhap");  // ...trừ trang đăng nhập
+    o.Conventions.AllowAnonymousToPage("/Rss");       // ...và nguồn tin RSS bảng giá (công khai)
     o.Conventions.AuthorizePage("/DuLieu", "Admin");  // đồng bộ dữ liệu: chỉ Admin
 });
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
