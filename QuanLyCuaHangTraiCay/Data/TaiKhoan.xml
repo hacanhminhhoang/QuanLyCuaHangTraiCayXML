@@ -2,19 +2,19 @@
 <NewDataSet>
   <TaiKhoan>
     <TenDangNhap>admin</TenDangNhap>
-    <MatKhau>admin</MatKhau>
+    <MatKhau>8da193366e1554c08b2870c50f737b9587c3372b656151c4a96028af26f51334</MatKhau>
     <Quyen>Admin</Quyen>
     <MaNV>NV001</MaNV>
   </TaiKhoan>
   <TaiKhoan>
     <TenDangNhap>binh</TenDangNhap>
-    <MatKhau>123</MatKhau>
+    <MatKhau>79966057ef8179f5ebabb30adf0dc62401372b4eb872e4e1e85e66afb2871e9b</MatKhau>
     <Quyen>NhanVien</Quyen>
     <MaNV>NV002</MaNV>
   </TaiKhoan>
   <TaiKhoan>
     <TenDangNhap>chau</TenDangNhap>
-    <MatKhau>123</MatKhau>
+    <MatKhau>21460d63b30f7973fa2268346daba4af9ac25d0479038d79f8fce84e9841221a</MatKhau>
     <Quyen>NhanVien</Quyen>
     <MaNV>NV003</MaNV>
   </TaiKhoan>

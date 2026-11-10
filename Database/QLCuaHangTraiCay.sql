@@ -27,7 +27,7 @@ CREATE TABLE NhanVien (
 
 CREATE TABLE TaiKhoan (
     TenDangNhap NVARCHAR(50) NOT NULL PRIMARY KEY,
-    MatKhau     NVARCHAR(50) NOT NULL,
+    MatKhau     NVARCHAR(64) NOT NULL,   -- SHA-256 dạng hex (64 ký tự)
     Quyen       NVARCHAR(20) NOT NULL CHECK (Quyen IN (N'Admin', N'NhanVien')),
     MaNV        NVARCHAR(10) NOT NULL REFERENCES NhanVien(MaNV)
 );
@@ -82,9 +82,9 @@ INSERT INTO NhanVien (MaNV, HoTen, GioiTinh, NgaySinh, DiaChi, SDT) VALUES
 GO
 
 INSERT INTO TaiKhoan (TenDangNhap, MatKhau, Quyen, MaNV) VALUES
-  (N'admin', N'admin', N'Admin', N'NV001'),
-  (N'binh', N'123', N'NhanVien', N'NV002'),
-  (N'chau', N'123', N'NhanVien', N'NV003');
+  (N'admin', N'8da193366e1554c08b2870c50f737b9587c3372b656151c4a96028af26f51334', N'Admin', N'NV001'),
+  (N'binh', N'79966057ef8179f5ebabb30adf0dc62401372b4eb872e4e1e85e66afb2871e9b', N'NhanVien', N'NV002'),
+  (N'chau', N'21460d63b30f7973fa2268346daba4af9ac25d0479038d79f8fce84e9841221a', N'NhanVien', N'NV003');
 GO
 
 INSERT INTO NhaCungCap (MaNCC, TenNCC, DiaChi, SDT) VALUES

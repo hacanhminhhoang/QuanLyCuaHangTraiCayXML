@@ -12,8 +12,8 @@
                 <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="[A-Za-z0-9_]{3,50}"/></xs:restriction></xs:simpleType>
               </xs:element>
               <xs:element name="MatKhau">
-                <xs:annotation><xs:documentation>Mật khẩu</xs:documentation></xs:annotation>
-                <xs:simpleType><xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="50"/></xs:restriction></xs:simpleType>
+                <xs:annotation><xs:documentation>Mật khẩu đã băm SHA-256 (64 ký tự hex) – XSD không cho lưu mật khẩu thường</xs:documentation></xs:annotation>
+                <xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="[0-9a-f]{64}"/></xs:restriction></xs:simpleType>
               </xs:element>
               <xs:element name="Quyen">
                 <xs:annotation><xs:documentation>Quyền hạn</xs:documentation></xs:annotation>

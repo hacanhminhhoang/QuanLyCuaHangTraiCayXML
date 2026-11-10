@@ -48,8 +48,9 @@
             }
             else
             {
-                <input id="o-@c.Ten" name="@c.Ten" value="@gt" type="@c.Kieu" readonly="@chiDoc" class="@(loi ? "o-loi" : null)" aria-invalid="@(loi ? "true" : null)"
-                       required="@(i < 2)" min="@(c.Kieu == "number" ? "0" : null)" step="@(c.Kieu == "number" ? "1" : null)" />
+                <input id="o-@c.Ten" name="@c.Ten" value="@(c.Kieu == "password" ? "" : gt)" type="@c.Kieu" readonly="@chiDoc" class="@(loi ? "o-loi" : null)" aria-invalid="@(loi ? "true" : null)"
+                       autocomplete="@(c.Kieu == "password" ? "new-password" : null)" placeholder="@(c.Kieu == "password" && Model.DangSua ? "Để trống = giữ nguyên" : null)"
+                       required="@(i < 2 && !(c.Kieu == "password" && Model.DangSua))" min="@(c.Kieu == "number" ? "0" : null)" step="@(c.Kieu == "number" ? "1" : null)" />
             }
             @:</div>
         }
