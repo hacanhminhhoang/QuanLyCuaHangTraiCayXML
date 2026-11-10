@@ -1,0 +1,14 @@
+@* Trạng thái tồn kho: màu + biểu tượng + chữ, không chỉ dựa vào màu. Model = số lượng tồn. *@
+@model int
+@if (Model <= 0)
+{
+    <span class="badge badge-do"><svg class="ic ic-sm" aria-hidden="true"><use href="#ic-error" /></svg>@Model · Hết hàng</span>
+}
+else if (Model < IndexModel.NguongSapHet)
+{
+    <span class="badge badge-cam"><svg class="ic ic-sm" aria-hidden="true"><use href="#ic-warn" /></svg>@Model · Sắp hết</span>
+}
+else
+{
+    <span class="badge badge-xanh">@Model</span>
+}

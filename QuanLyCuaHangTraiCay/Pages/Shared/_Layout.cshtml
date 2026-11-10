@@ -1,75 +1,123 @@
 @{
     string duongDan = Context.Request.Path.Value + Context.Request.QueryString;
     bool daDangNhap = User.Identity.IsAuthenticated;
-    string Active(string url) => (url == "/" ? Context.Request.Path.Value == "/" : duongDan.StartsWith(url, StringComparison.OrdinalIgnoreCase)) ? "active" : null;
+    bool Dang(string url) => url == "/" ? Context.Request.Path.Value == "/" : duongDan.StartsWith(url, StringComparison.OrdinalIgnoreCase);
+    string Active(string url) => Dang(url) ? "active" : null;
+    string Cur(string url) => Dang(url) ? "page" : null;
 }
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
     <title>@ViewData["Title"] · Cửa hàng trái cây</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="alternate" type="application/rss+xml" title="Fruit Store – Bảng giá trái cây" href="/Rss" />
 </head>
 <body class="@(daDangNhap ? "co-menu" : "khong-menu")">
+    <partial name="_Icons" />
+    <a class="bo-qua" href="#noi-dung">Bỏ qua điều hướng, đến nội dung chính</a>
 @if (daDangNhap)
 {
-    <aside class="sidebar">
+    <header class="thanh-tren">
         <a class="logo" href="/">
-            <span class="logo-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="14" r="7" fill="#ffb74d"/><path d="M12 7c0-2.5 1.5-4 4-4-.2 2.6-1.6 4-4 4z" fill="#81c784"/></svg>
-            </span>
+            <span class="logo-icon" aria-hidden="true"><svg class="ic"><use href="#ic-leaf" /></svg></span>
+            <span><b>Fruit Store</b></span>
+        </a>
+        <button type="button" class="nut-menu" aria-label="Mở menu" aria-expanded="false" aria-controls="menu-chinh">
+            <svg class="ic" aria-hidden="true"><use href="#ic-menu" /></svg>
+        </button>
+    </header>
+    <div class="man-che" aria-hidden="true"></div>
+    <aside class="sidebar" id="menu-chinh" aria-label="Thanh bên">
+        <a class="logo" href="/">
+            <span class="logo-icon" aria-hidden="true"><svg class="ic"><use href="#ic-leaf" /></svg></span>
             <span><b>Fruit Store</b><small>Quản lý cửa hàng trái cây</small></span>
         </a>
         <nav aria-label="Menu chính">
-            <a class="@Active("/")" href="/">Tổng quan</a>
+            <a class="@Active("/")" aria-current="@Cur("/")" href="/"><svg class="ic" aria-hidden="true"><use href="#ic-home" /></svg>Tổng quan</a>
             <p class="nhom">Bán hàng</p>
-            <a class="@Active("/LapHoaDon")" href="/LapHoaDon">Lập hóa đơn</a>
-            <a class="@Active("/HoaDon")" href="/HoaDon">Hóa đơn &amp; doanh thu</a>
+            <a class="@Active("/LapHoaDon")" aria-current="@Cur("/LapHoaDon")" href="/LapHoaDon"><svg class="ic" aria-hidden="true"><use href="#ic-cart" /></svg>Lập hóa đơn</a>
+            <a class="@Active("/HoaDon")" aria-current="@Cur("/HoaDon")" href="/HoaDon"><svg class="ic" aria-hidden="true"><use href="#ic-receipt" /></svg>Hóa đơn &amp; doanh thu</a>
             <p class="nhom">Kho</p>
-            <a class="@Active("/NhapHang")" href="/NhapHang">Nhập hàng</a>
-            <a class="@Active("/PhieuNhap")" href="/PhieuNhap">Phiếu nhập</a>
+            <a class="@Active("/NhapHang")" aria-current="@Cur("/NhapHang")" href="/NhapHang"><svg class="ic" aria-hidden="true"><use href="#ic-package" /></svg>Nhập hàng</a>
+            <a class="@Active("/PhieuNhap")" aria-current="@Cur("/PhieuNhap")" href="/PhieuNhap"><svg class="ic" aria-hidden="true"><use href="#ic-clipboard" /></svg>Phiếu nhập</a>
             <p class="nhom">Danh mục</p>
-            <a class="@Active("/DanhMuc/TraiCay")" href="/DanhMuc/TraiCay">Trái cây</a>
-            <a class="@Active("/DanhMuc/NhaCungCap")" href="/DanhMuc/NhaCungCap">Nhà cung cấp</a>
-            <a class="@Active("/DanhMuc/KhachHang")" href="/DanhMuc/KhachHang">Khách hàng</a>
+            <a class="@Active("/DanhMuc/TraiCay")" aria-current="@Cur("/DanhMuc/TraiCay")" href="/DanhMuc/TraiCay"><svg class="ic" aria-hidden="true"><use href="#ic-fruit" /></svg>Trái cây</a>
+            <a class="@Active("/DanhMuc/NhaCungCap")" aria-current="@Cur("/DanhMuc/NhaCungCap")" href="/DanhMuc/NhaCungCap"><svg class="ic" aria-hidden="true"><use href="#ic-truck" /></svg>Nhà cung cấp</a>
+            <a class="@Active("/DanhMuc/KhachHang")" aria-current="@Cur("/DanhMuc/KhachHang")" href="/DanhMuc/KhachHang"><svg class="ic" aria-hidden="true"><use href="#ic-users" /></svg>Khách hàng</a>
             @if (User.LaAdmin())
             {
-                <a class="@Active("/DanhMuc/NhanVien")" href="/DanhMuc/NhanVien">Nhân viên</a>
-                <a class="@Active("/DanhMuc/TaiKhoan")" href="/DanhMuc/TaiKhoan">Tài khoản</a>
+                <a class="@Active("/DanhMuc/NhanVien")" aria-current="@Cur("/DanhMuc/NhanVien")" href="/DanhMuc/NhanVien"><svg class="ic" aria-hidden="true"><use href="#ic-badge" /></svg>Nhân viên</a>
+                <a class="@Active("/DanhMuc/TaiKhoan")" aria-current="@Cur("/DanhMuc/TaiKhoan")" href="/DanhMuc/TaiKhoan"><svg class="ic" aria-hidden="true"><use href="#ic-key" /></svg>Tài khoản</a>
                 <p class="nhom">Hệ thống</p>
-                <a class="@Active("/DuLieu")" href="/DuLieu">Dữ liệu XML</a>
+                <a class="@Active("/DuLieu")" aria-current="@Cur("/DuLieu")" href="/DuLieu"><svg class="ic" aria-hidden="true"><use href="#ic-database" /></svg>Dữ liệu XML</a>
             }
         </nav>
         <div class="nguoi-dung">
             <span class="avatar" aria-hidden="true">@User.HoTen()?.Split(' ').Last().Substring(0, 1)</span>
             <span class="ten"><b>@User.HoTen()</b><small>@(User.LaAdmin() ? "Quản lý" : "Nhân viên")</small></span>
-            <a href="/Rss" class="lien-ket-nho" target="_blank" rel="noopener">RSS bảng giá</a>
-            <a href="/DoiMatKhau" class="lien-ket-nho">Đổi mật khẩu</a>
-            <form method="post" asp-page="/DangXuat"><button class="lien-ket-nho" type="submit">Đăng xuất</button></form>
+            <a href="/Rss" class="lien-ket-nho" target="_blank" rel="noopener"><svg class="ic ic-sm" aria-hidden="true"><use href="#ic-rss" /></svg>RSS bảng giá<span class="sr-only"> (mở tab mới)</span></a>
+            <a href="/DoiMatKhau" class="lien-ket-nho"><svg class="ic ic-sm" aria-hidden="true"><use href="#ic-lock" /></svg>Đổi mật khẩu</a>
+            <form method="post" asp-page="/DangXuat"><button class="lien-ket-nho" type="submit"><svg class="ic ic-sm" aria-hidden="true"><use href="#ic-signout" /></svg>Đăng xuất</button></form>
         </div>
     </aside>
 }
-    <main class="noi-dung">
+    <main class="noi-dung" id="noi-dung" tabindex="-1">
         @if (TempData["ThongBao"] != null)
         {
             <div class="alert alert-ok" role="status">
-                @TempData["ThongBao"]
-                @if (TempData["InHoaDon"] != null)
-                {
-                    <a href="/Xslt?bang=HoaDon&amp;xslt=HoaDon&amp;maHD=@TempData["InHoaDon"]" target="_blank">In hóa đơn</a>
-                }
+                <svg class="ic" aria-hidden="true"><use href="#ic-ok" /></svg>
+                <span>
+                    @TempData["ThongBao"]
+                    @if (TempData["InHoaDon"] != null)
+                    {
+                        <a href="/Xslt?bang=HoaDon&amp;xslt=HoaDon&amp;maHD=@TempData["InHoaDon"]" target="_blank" rel="noopener">In hóa đơn<span class="sr-only"> (mở tab mới)</span></a>
+                    }
+                </span>
             </div>
         }
         @if (TempData["Loi"] != null)
         {
-            <div class="alert alert-loi" role="alert">@TempData["Loi"]</div>
+            <div class="alert alert-loi" role="alert">
+                <svg class="ic" aria-hidden="true"><use href="#ic-error" /></svg>
+                <span>@TempData["Loi"]</span>
+            </div>
         }
         @RenderBody()
     </main>
     @await RenderSectionAsync("Scripts", required: false)
+@if (daDangNhap)
+{
+    <script>
+        // Menu kéo ra trên màn hình nhỏ: nút mở/đóng, nhấn nền mờ hoặc phím Esc để đóng
+        (function () {
+            var nut = document.querySelector('.nut-menu'), menu = document.getElementById('menu-chinh'), che = document.querySelector('.man-che');
+            if (!nut || !menu) return;
+            function dat(mo) {
+                document.body.classList.toggle('menu-mo', mo);
+                nut.setAttribute('aria-expanded', mo);
+                nut.setAttribute('aria-label', mo ? 'Đóng menu' : 'Mở menu');
+                if (mo) { var a = menu.querySelector('nav a'); if (a) a.focus(); } else { nut.focus(); }
+            }
+            // Vùng bảng cuộn ngang được: cho phép dùng bàn phím (Tab rồi phím mũi tên) và đặt tên cho đọc màn hình
+            function capNhatCuon() {
+                document.querySelectorAll('.cuon-ngang').forEach(function (v) {
+                    var cuon = v.scrollWidth > v.clientWidth + 1;
+                    if (cuon) { var cap = v.querySelector('caption'); v.tabIndex = 0; v.setAttribute('role', 'region'); v.setAttribute('aria-label', cap ? cap.textContent + ' (cuộn ngang)' : 'Bảng (cuộn ngang)'); }
+                    else { v.removeAttribute('tabindex'); v.removeAttribute('role'); v.removeAttribute('aria-label'); }
+                });
+            }
+            capNhatCuon(); window.addEventListener('resize', capNhatCuon);
+            nut.addEventListener('click', function () { dat(!document.body.classList.contains('menu-mo')); });
+            che.addEventListener('click', function () { dat(false); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.body.classList.contains('menu-mo')) dat(false); });
+        })();
+    </script>
+}
 </body>
 </html>
