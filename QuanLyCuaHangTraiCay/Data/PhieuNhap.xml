@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <PhieuNhap>
+    <MaPN>PN001</MaPN>
+    <NgayNhap>2026-10-30</NgayNhap>
+    <MaNV>NV001</MaNV>
+    <MaNCC>NCC002</MaNCC>
+    <TongTien>1560000</TongTien>
+  </PhieuNhap>
+</NewDataSet>

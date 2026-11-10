@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewDataSet>
+  <ChiTietPhieuNhap>
+    <MaPN>PN001</MaPN>
+    <MaTC>TC001</MaTC>
+    <SoLuong>20</SoLuong>
+    <DonGiaNhap>45000</DonGiaNhap>
+    <ThanhTien>900000</ThanhTien>
+  </ChiTietPhieuNhap>
+  <ChiTietPhieuNhap>
+    <MaPN>PN001</MaPN>
+    <MaTC>TC006</MaTC>
+    <SoLuong>30</SoLuong>
+    <DonGiaNhap>22000</DonGiaNhap>
+    <ThanhTien>660000</ThanhTien>
+  </ChiTietPhieuNhap>
+</NewDataSet>
