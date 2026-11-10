@@ -324,9 +324,9 @@ input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
     .nut-menu .ic { width: 24px; height: 24px; }
     .thanh-tren :focus-visible { outline-color: var(--color-side-ring); }
     .sidebar { position: fixed; inset: 0 auto 0 0; z-index: var(--z-drawer); width: min(300px, 86vw); height: 100dvh; transform: translateX(-100%); visibility: hidden; transition: transform var(--t-med), visibility var(--t-med); overflow-y: auto; }
-    .menu-mo .sidebar { transform: none; visibility: visible; }
+    .menu-mo .sidebar { transform: none; visibility: visible; transition: transform var(--t-med), visibility 0s; } /* mở: hiện ngay để focus được vào menu; đóng: ẩn sau khi trượt xong */
     .man-che { display: block; position: fixed; inset: 0; z-index: var(--z-scrim); background: rgb(2 8 5 / .6); opacity: 0; visibility: hidden; transition: opacity var(--t-med), visibility var(--t-med); }
-    .menu-mo .man-che { opacity: 1; visibility: visible; }
+    .menu-mo .man-che { opacity: 1; visibility: visible; transition: opacity var(--t-med), visibility 0s; }
     .menu-mo { overflow: hidden; }
     .noi-dung { padding: var(--sp-6) var(--sp-5) 48px; }
 }
